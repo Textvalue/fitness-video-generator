@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
-export const NANO_BANANA_MODEL = "gemini-2.0-flash-exp";
+export const NANO_BANANA_MODEL = "gemini-3.1-flash-image-preview";
 export const VEO_MODELS = {
   "veo-3.1": "veo-3.1-generate-preview",
   "veo-3.1-fast": "veo-3.1-fast-generate-preview",
@@ -12,10 +12,10 @@ export const VEO_MODELS = {
 export type VeoVersion = keyof typeof VEO_MODELS;
 
 export async function generateImage(prompt: string, referenceImageBase64?: string) {
-  const contents: Array<{ text?: string; inlineData?: { mimeType: string; data: string } }> = [];
+  const parts: Array<{ text?: string; inlineData?: { mimeType: string; data: string } }> = [];
 
   if (referenceImageBase64) {
-    contents.push({
+    parts.push({
       inlineData: {
         mimeType: "image/jpeg",
         data: referenceImageBase64,
@@ -23,21 +23,31 @@ export async function generateImage(prompt: string, referenceImageBase64?: strin
     });
   }
 
-  contents.push({ text: prompt });
+  parts.push({ text: prompt });
+
+  const contents = [
+    {
+      role: "user" as const,
+      parts,
+    },
+  ];
 
   const response = await ai.models.generateContent({
     model: NANO_BANANA_MODEL,
-    contents: contents,
+    contents,
     config: {
-      responseModalities: ["TEXT", "IMAGE"],
+      responseModalities: ["IMAGE", "TEXT"],
+      imageConfig: {
+        imageSize: "1K",
+      },
     },
   });
 
-  const parts = response.candidates?.[0]?.content?.parts || [];
+  const responseParts = response.candidates?.[0]?.content?.parts || [];
   let imageData: { base64: string; mimeType: string } | null = null;
   let text = "";
 
-  for (const part of parts) {
+  for (const part of responseParts) {
     if (part.inlineData) {
       imageData = {
         base64: part.inlineData.data!,
@@ -55,31 +65,29 @@ export async function generateImage(prompt: string, referenceImageBase64?: strin
 export async function generateVideo(
   prompt: string,
   veoVersion: VeoVersion = "veo-3.1",
-  referenceImageBase64?: string
+  _referenceImageBase64?: string
 ) {
   const model = VEO_MODELS[veoVersion];
 
-  const config: Record<string, unknown> = {
-    aspectRatio: "16:9",
-  };
-
-  if (referenceImageBase64) {
-    config.image = {
-      imageBytes: referenceImageBase64,
-      mimeType: "image/png",
-    };
-  }
-
   let operation = await ai.models.generateVideos({
     model,
-    prompt,
-    config,
+    source: {
+      prompt,
+    },
+    config: {
+      numberOfVideos: 1,
+      aspectRatio: "16:9",
+      resolution: "720p",
+      durationSeconds: 8,
+    },
   });
 
-  // Poll until done
+  // Poll until done using getVideosOperation
   while (!operation.done) {
     await new Promise((r) => setTimeout(r, 10000));
-    operation = await ai.operations.get({ operation });
+    operation = await ai.operations.getVideosOperation({
+      operation,
+    });
   }
 
   const video = operation.response?.generatedVideos?.[0];
@@ -87,8 +95,14 @@ export async function generateVideo(
     throw new Error("Video generation failed: no video URI returned");
   }
 
+  // Download the video (requires API key appended to URI)
+  const videoUrl = `${video.video.uri}&key=${process.env.GEMINI_API_KEY}`;
+  const response = await fetch(videoUrl);
+  const buffer = Buffer.from(await response.arrayBuffer());
+
   return {
     videoUri: video.video.uri,
+    videoBuffer: buffer,
   };
 }
 

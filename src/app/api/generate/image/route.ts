@@ -55,13 +55,25 @@ The trainer should be in proper athletic form, ready to begin the exercise. High
     let trainerBase64: string | undefined;
     try {
       const trainerRes = await fetch(trainer.baseImageUrl);
-      const trainerBuffer = Buffer.from(await trainerRes.arrayBuffer());
-      trainerBase64 = trainerBuffer.toString("base64");
+      if (trainerRes.ok) {
+        const trainerBuffer = Buffer.from(await trainerRes.arrayBuffer());
+        // Only use as reference if the image is reasonable size (< 4MB)
+        if (trainerBuffer.length < 4 * 1024 * 1024) {
+          trainerBase64 = trainerBuffer.toString("base64");
+        }
+      }
     } catch {
       // If we can't fetch the trainer image, generate without reference
     }
 
-    const result = await generateImage(prompt, trainerBase64);
+    // Try with reference image first, fall back to without
+    let result;
+    try {
+      result = await generateImage(prompt, trainerBase64);
+    } catch {
+      // If reference image causes issues, try without it
+      result = await generateImage(prompt);
+    }
 
     if (!result.imageData) {
       throw new Error("No image generated");

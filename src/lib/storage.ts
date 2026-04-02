@@ -24,6 +24,7 @@ export async function uploadFile(
       Key: key,
       Body: body,
       ContentType: contentType,
+      ACL: "public-read",
     })
   );
   return `${process.env.TIGRIS_ENDPOINT}/${BUCKET}/${key}`;

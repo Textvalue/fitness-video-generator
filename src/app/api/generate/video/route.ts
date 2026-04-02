@@ -54,11 +54,9 @@ export async function POST(req: NextRequest) {
 
     const result = await generateVideo(videoPrompt, veoVersion as VeoVersion, imageBase64);
 
-    // Download video from URI and upload to MinIO
-    const videoRes = await fetch(result.videoUri);
-    const videoBuffer = Buffer.from(await videoRes.arrayBuffer());
+    // Upload video buffer directly to Tigris
     const key = `generations/${generationId}/${randomUUID()}.mp4`;
-    const videoUrl = await uploadFile(key, videoBuffer, "video/mp4");
+    const videoUrl = await uploadFile(key, result.videoBuffer, "video/mp4");
 
     // Calculate costs based on Veo version
     const costMap: Record<string, number> = {
