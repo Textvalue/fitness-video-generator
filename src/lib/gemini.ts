@@ -11,13 +11,17 @@ export const VEO_MODELS = {
 
 export type VeoVersion = keyof typeof VEO_MODELS;
 
-export async function generateImage(prompt: string, referenceImageBase64?: string) {
+export async function generateImage(
+  prompt: string,
+  referenceImageBase64?: string,
+  referenceImageMimeType: string = "image/jpeg"
+) {
   const parts: Array<{ text?: string; inlineData?: { mimeType: string; data: string } }> = [];
 
   if (referenceImageBase64) {
     parts.push({
       inlineData: {
-        mimeType: "image/jpeg",
+        mimeType: referenceImageMimeType,
         data: referenceImageBase64,
       },
     });
@@ -39,6 +43,7 @@ export async function generateImage(prompt: string, referenceImageBase64?: strin
       responseModalities: ["IMAGE", "TEXT"],
       imageConfig: {
         imageSize: "1K",
+        personGeneration: "ALLOW_ALL",
       },
     },
   });

@@ -34,16 +34,21 @@ export async function POST(req: NextRequest) {
 
   // Fetch trainer image first so we can tailor the prompt
   let trainerBase64: string | undefined;
+  let trainerMimeType = "image/jpeg";
   try {
     const trainerRes = await fetch(trainer.baseImageUrl);
     if (trainerRes.ok) {
+      const contentType = trainerRes.headers.get("content-type");
+      if (contentType) {
+        trainerMimeType = contentType.split(";")[0].trim();
+      }
       const trainerBuffer = Buffer.from(await trainerRes.arrayBuffer());
       if (trainerBuffer.length < 4 * 1024 * 1024) {
         trainerBase64 = trainerBuffer.toString("base64");
       }
     }
   } catch {
-    // If we can't fetch the trainer image, generate without reference
+    console.warn("Failed to fetch trainer image, generating without reference");
   }
 
   // Compose the image generation prompt — when we have a reference image,
@@ -74,9 +79,9 @@ The trainer should be in proper athletic form, ready to begin the exercise. High
     // Try with reference image first, fall back to without
     let result;
     try {
-      result = await generateImage(prompt, trainerBase64);
-    } catch {
-      // If reference image causes issues, try without it
+      result = await generateImage(prompt, trainerBase64, trainerMimeType);
+    } catch (refError) {
+      console.warn("Image generation with reference failed, retrying without:", refError);
       result = await generateImage(prompt);
     }
 
