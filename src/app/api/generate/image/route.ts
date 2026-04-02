@@ -54,10 +54,10 @@ export async function POST(req: NextRequest) {
   // Compose the image generation prompt — when we have a reference image,
   // explicitly instruct the model to match the person's appearance
   const prompt = trainerBase64
-    ? `Generate a photorealistic image of the EXACT same person shown in the reference photo. This person is a fitness trainer named "${trainer.name}". Show them in the starting position of "${exerciseName}".
+    ? `Edit this photo of a person: place them in the starting position of the exercise "${exerciseName}". Keep the person exactly as they are — do not change their face, gender, body, skin tone, or identity. Only change their pose and surroundings.
 Exercise description: ${exerciseDesc}
 Environment: ${environment.prompt}
-IMPORTANT: The generated person must match the reference photo — same face, same gender, same body type, same skin tone. The trainer should be in proper athletic form, ready to begin the exercise. High quality, 8K, cinematic lighting.`
+Show proper athletic form, ready to begin the exercise. High quality, cinematic lighting.`
     : `Generate a photorealistic image of a fitness trainer named "${trainer.name}" in the starting position of "${exerciseName}".
 Exercise description: ${exerciseDesc}
 Environment: ${environment.prompt}

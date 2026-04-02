@@ -43,7 +43,6 @@ export async function generateImage(
       responseModalities: ["IMAGE", "TEXT"],
       imageConfig: {
         imageSize: "1K",
-        personGeneration: "ALLOW_ALL",
       },
     },
   });
