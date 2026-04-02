@@ -10,7 +10,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { name, description, bodyParts, category, equipment, difficulty } = body;
+  const { name, description, bodyParts, category, equipment, difficulty, generationPrompt } = body;
 
   if (!name || !description || !category) {
     return NextResponse.json(
@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
       category,
       equipment: equipment || [],
       difficulty: difficulty || 1,
+      generationPrompt: generationPrompt || null,
     },
   });
 

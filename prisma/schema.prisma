@@ -47,19 +47,20 @@ model Environment {
 }
 
 model Exercise {
-  id          String       @id @default(cuid())
-  opensetId   String?      @unique
-  name        Json
-  description Json
-  bodyParts   String[]
-  category    String
-  equipment   String[]
-  difficulty  Int          @default(1)
-  metadata    Json?
-  mediaUrls   Json?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  generations Generation[]
+  id               String       @id @default(cuid())
+  opensetId        String?      @unique
+  name             Json
+  description      Json
+  generationPrompt String?
+  bodyParts        String[]
+  category         String
+  equipment        String[]
+  difficulty       Int          @default(1)
+  metadata         Json?
+  mediaUrls        Json?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  generations      Generation[]
 }
 
 enum GenerationStatus {

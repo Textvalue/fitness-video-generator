@@ -6,6 +6,7 @@ interface Exercise {
   id: string;
   name: Record<string, string>;
   description: Record<string, string>;
+  generationPrompt: string | null;
   bodyParts: string[];
   category: string;
   equipment: string[];
@@ -61,7 +62,7 @@ export function LibraryClient({
   // Add/Edit exercise
   const [showAddExercise, setShowAddExercise] = useState(false);
   const [editingExercise, setEditingExercise] = useState<Exercise | null>(null);
-  const [exForm, setExForm] = useState({ name: "", description: "", category: "push", bodyParts: "", equipment: "", difficulty: 1 });
+  const [exForm, setExForm] = useState({ name: "", description: "", generationPrompt: "", category: "push", bodyParts: "", equipment: "", difficulty: 1 });
   const [exSaving, setExSaving] = useState(false);
 
   // Pipeline state
@@ -109,7 +110,7 @@ export function LibraryClient({
 
   // Exercise CRUD
   const openAddExercise = () => {
-    setExForm({ name: "", description: "", category: "push", bodyParts: "", equipment: "", difficulty: 1 });
+    setExForm({ name: "", description: "", generationPrompt: "", category: "push", bodyParts: "", equipment: "", difficulty: 1 });
     setEditingExercise(null);
     setShowAddExercise(true);
   };
@@ -119,6 +120,7 @@ export function LibraryClient({
     setExForm({
       name: ex.name.en || "",
       description: ex.description.en || "",
+      generationPrompt: ex.generationPrompt || "",
       category: ex.category,
       bodyParts: ex.bodyParts.join(", "),
       equipment: ex.equipment.join(", "),
@@ -134,6 +136,7 @@ export function LibraryClient({
     const body = {
       name: { en: exForm.name.trim() },
       description: { en: exForm.description.trim() },
+      generationPrompt: exForm.generationPrompt.trim() || null,
       category: exForm.category,
       bodyParts: exForm.bodyParts.split(",").map((s) => s.trim()).filter(Boolean),
       equipment: exForm.equipment.split(",").map((s) => s.trim()).filter(Boolean),
@@ -150,7 +153,7 @@ export function LibraryClient({
         setExercises((prev) =>
           prev.map((ex) =>
             ex.id === editingExercise.id
-              ? { ...ex, ...body, name: body.name as Record<string, string>, description: body.description as Record<string, string> }
+              ? { ...ex, ...body, name: body.name as Record<string, string>, description: body.description as Record<string, string>, generationPrompt: body.generationPrompt }
               : ex
           )
         );
@@ -359,6 +362,11 @@ export function LibraryClient({
               <div>
                 <label className="text-[10px] font-bold uppercase tracking-widest text-kp-on-surface-variant block mb-2">Description</label>
                 <textarea value={exForm.description} onChange={(e) => setExForm({ ...exForm, description: e.target.value })} rows={3} placeholder="Describe the exercise..." className="w-full bg-kp-surface-container-highest rounded-lg p-3 text-sm text-kp-on-surface border-none focus:ring-1 focus:ring-kp-primary placeholder:text-kp-on-surface-variant/40 resize-none" />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-kp-on-surface-variant block mb-2">Generation Prompt</label>
+                <textarea value={exForm.generationPrompt} onChange={(e) => setExForm({ ...exForm, generationPrompt: e.target.value })} rows={3} placeholder="Detailed instructions for AI generation, e.g. 'Feet shoulder-width apart, barbell on upper back, squat down until thighs are parallel to floor, knees tracking over toes, chest up, back straight...'" className="w-full bg-kp-surface-container-highest rounded-lg p-3 text-sm text-kp-on-surface border-none focus:ring-1 focus:ring-kp-primary placeholder:text-kp-on-surface-variant/40 resize-none" />
+                <p className="text-[9px] text-kp-on-surface-variant/50 mt-1">Specific body positioning and technique details for image/video generation. If empty, the description is used instead.</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>

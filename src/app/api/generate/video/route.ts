@@ -27,8 +27,10 @@ export async function POST(req: NextRequest) {
 
   const exerciseName = (generation.exercise.name as Record<string, string>).en || "exercise";
   const exerciseDesc = (generation.exercise.description as Record<string, string>).en || "";
+  const exercisePrompt = generation.exercise.generationPrompt || "";
 
-  const videoPrompt = `Cinematic fitness video of a trainer performing "${exerciseName}". ${exerciseDesc}. Environment: ${generation.environment.prompt}. Smooth, professional camera movement, proper exercise form, high production value.`;
+  const movementDetail = exercisePrompt || exerciseDesc;
+  const videoPrompt = `Cinematic fitness video of a trainer performing "${exerciseName}". ${movementDetail}. Environment: ${generation.environment.prompt}. Smooth, professional camera movement, proper exercise form and technique, high production value.`;
 
   await prisma.generation.update({
     where: { id: generationId },

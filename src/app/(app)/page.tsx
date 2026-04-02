@@ -12,6 +12,7 @@ async function getExercises() {
       id: e.id,
       name: e.name as Record<string, string>,
       description: e.description as Record<string, string>,
+      generationPrompt: e.generationPrompt,
       bodyParts: e.bodyParts,
       category: e.category,
       equipment: e.equipment,

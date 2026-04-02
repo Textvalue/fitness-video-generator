@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
 
   const exerciseName = (exercise.name as Record<string, string>).en || "exercise";
   const exerciseDesc = (exercise.description as Record<string, string>).en || "";
+  const exercisePrompt = exercise.generationPrompt || "";
 
   // Fetch trainer image first so we can tailor the prompt
   let trainerBase64: string | undefined;
@@ -53,15 +54,19 @@ export async function POST(req: NextRequest) {
 
   // Compose the image generation prompt — when we have a reference image,
   // explicitly instruct the model to match the person's appearance
+  const movementInstructions = exercisePrompt
+    ? `Exercise-specific instructions: ${exercisePrompt}`
+    : `Exercise description: ${exerciseDesc}`;
+
   const prompt = trainerBase64
-    ? `Edit this photo of a person: place them in the starting position of the exercise "${exerciseName}". Keep the person exactly as they are — do not change their face, gender, body, skin tone, or identity. Only change their pose and surroundings.
-Exercise description: ${exerciseDesc}
+    ? `Edit this photo of a person: place them performing the exercise "${exerciseName}". Keep the person exactly as they are — do not change their face, gender, body, skin tone, or identity. Only change their pose and surroundings.
+${movementInstructions}
 Environment: ${environment.prompt}
-Show proper athletic form, ready to begin the exercise. High quality, cinematic lighting.`
-    : `Generate a photorealistic image of a fitness trainer named "${trainer.name}" in the starting position of "${exerciseName}".
-Exercise description: ${exerciseDesc}
+Show proper athletic form with correct technique. High quality, cinematic lighting.`
+    : `Generate a photorealistic image of a fitness trainer named "${trainer.name}" performing "${exerciseName}".
+${movementInstructions}
 Environment: ${environment.prompt}
-The trainer should be in proper athletic form, ready to begin the exercise. High quality, 8K, cinematic lighting.`;
+The trainer should be in proper athletic form with correct technique. High quality, 8K, cinematic lighting.`;
 
   // Create generation record
   const generation = await prisma.generation.create({

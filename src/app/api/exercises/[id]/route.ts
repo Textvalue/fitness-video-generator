@@ -11,7 +11,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const body = await req.json();
-  const { name, description, bodyParts, category, equipment, difficulty } = body;
+  const { name, description, bodyParts, category, equipment, difficulty, generationPrompt } = body;
 
   const exercise = await prisma.exercise.findUnique({ where: { id } });
   if (!exercise) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -25,6 +25,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       ...(category && { category }),
       ...(equipment && { equipment }),
       ...(difficulty !== undefined && { difficulty }),
+      ...(generationPrompt !== undefined && { generationPrompt: generationPrompt || null }),
     },
   });
   return NextResponse.json(updated);
