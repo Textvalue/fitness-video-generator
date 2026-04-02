@@ -1,55 +1,60 @@
 import { prisma } from "@/lib/db";
-import { DashboardClient } from "./dashboard-client";
+import { proxyUrl } from "@/lib/media-url";
+import { LibraryClient } from "./library-client";
 
-async function getDashboardData() {
-  const [totalGenerations, recentGenerations, costData, recent] = await Promise.all([
-    prisma.generation.count({ where: { status: "COMPLETED" } }),
-    prisma.generation.count({
-      where: { createdAt: { gte: new Date(Date.now() - 24 * 60 * 60 * 1000) } },
-    }),
-    prisma.generation.aggregate({
-      _sum: { totalCost: true },
-    }),
-    prisma.generation.findMany({
-      take: 4,
-      orderBy: { createdAt: "desc" },
-      include: { exercise: true, trainer: true, environment: true },
-    }),
-  ]);
-
-  return {
-    totalVideos: totalGenerations,
-    recentCount: recentGenerations,
-    totalCost: costData._sum.totalCost || 0,
-    recentGenerations: recent.map((g) => ({
-      id: g.id,
-      status: g.status,
-      exerciseName:
-        (g.exercise.name as Record<string, string>).en || "Unknown",
-      trainerName: g.trainer.name,
-      environmentName: g.environment.name,
-      imageUrl: g.generatedImageUrl,
-      videoUrl: g.generatedVideoUrl,
-      totalCost: g.totalCost,
-      createdAt: g.createdAt.toISOString(),
-      imagePrompt: g.imagePrompt,
-    })),
-  };
+async function getExercises() {
+  const exercises = await prisma.exercise.findMany({
+    orderBy: { category: "asc" },
+  });
+  return exercises.map((e) => {
+    const media = e.mediaUrls as { photos?: { url: string; label: string }[] } | null;
+    return {
+      id: e.id,
+      name: e.name as Record<string, string>,
+      description: e.description as Record<string, string>,
+      bodyParts: e.bodyParts,
+      category: e.category,
+      equipment: e.equipment,
+      difficulty: e.difficulty,
+      mediaUrls: media?.photos
+        ? { photos: media.photos.map((p) => ({ ...p, url: proxyUrl(p.url) || p.url })) }
+        : null,
+    };
+  });
 }
 
-export default async function DashboardPage() {
-  let data;
+async function getGenerations() {
+  const generations = await prisma.generation.findMany({
+    where: { status: "COMPLETED" },
+    orderBy: { completedAt: "desc" },
+    select: {
+      id: true,
+      exerciseId: true,
+      generatedImageUrl: true,
+      generatedVideoUrl: true,
+      veoVersion: true,
+      completedAt: true,
+    },
+  });
+  return generations.map((g) => ({
+    id: g.id,
+    exerciseId: g.exerciseId,
+    imageUrl: proxyUrl(g.generatedImageUrl),
+    videoUrl: proxyUrl(g.generatedVideoUrl),
+    veoVersion: g.veoVersion,
+    completedAt: g.completedAt?.toISOString() || null,
+  }));
+}
+
+export default async function HomePage() {
+  let exercises: Awaited<ReturnType<typeof getExercises>> = [];
+  let generations: Awaited<ReturnType<typeof getGenerations>> = [];
   try {
-    data = await getDashboardData();
+    [exercises, generations] = await Promise.all([getExercises(), getGenerations()]);
   } catch {
-    // DB not connected yet — show empty state
-    data = {
-      totalVideos: 0,
-      recentCount: 0,
-      totalCost: 0,
-      recentGenerations: [],
-    };
+    exercises = [];
+    generations = [];
   }
 
-  return <DashboardClient data={data} />;
+  return <LibraryClient exercises={exercises} generations={generations} />;
 }

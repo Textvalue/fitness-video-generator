@@ -1,36 +1,19 @@
 import { prisma } from "@/lib/db";
+import { proxyUrl } from "@/lib/media-url";
 import { TrainersClient } from "./trainers-client";
 
-async function getData() {
-  const [trainers, environments] = await Promise.all([
-    prisma.trainer.findMany({ orderBy: { createdAt: "desc" } }),
-    prisma.environment.findMany({ orderBy: { createdAt: "desc" } }),
-  ]);
-
-  return {
-    trainers: trainers.map((t) => ({
+export default async function TrainersPage() {
+  let trainers: { id: string; name: string; imageUrl: string }[] = [];
+  try {
+    const data = await prisma.trainer.findMany({ orderBy: { createdAt: "desc" } });
+    trainers = data.map((t) => ({
       id: t.id,
       name: t.name,
-      baseImageUrl: t.baseImageUrl,
-      createdAt: t.createdAt.toISOString(),
-    })),
-    environments: environments.map((e) => ({
-      id: e.id,
-      name: e.name,
-      description: e.description,
-      prompt: e.prompt,
-      previewUrl: e.previewUrl,
-    })),
-  };
-}
-
-export default async function TrainersPage() {
-  let data;
-  try {
-    data = await getData();
+      imageUrl: proxyUrl(t.baseImageUrl) || t.baseImageUrl,
+    }));
   } catch {
-    data = { trainers: [], environments: [] };
+    trainers = [];
   }
 
-  return <TrainersClient data={data} />;
+  return <TrainersClient trainers={trainers} />;
 }

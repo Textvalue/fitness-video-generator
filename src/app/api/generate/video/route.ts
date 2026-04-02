@@ -40,7 +40,6 @@ export async function POST(req: NextRequest) {
   });
 
   try {
-    // Get reference image as base64
     let imageBase64: string | undefined;
     if (generation.generatedImageUrl) {
       try {
@@ -54,11 +53,9 @@ export async function POST(req: NextRequest) {
 
     const result = await generateVideo(videoPrompt, veoVersion as VeoVersion, imageBase64);
 
-    // Upload video buffer directly to Tigris
     const key = `generations/${generationId}/${randomUUID()}.mp4`;
     const videoUrl = await uploadFile(key, result.videoBuffer, "video/mp4");
 
-    // Calculate costs based on Veo version
     const costMap: Record<string, number> = {
       "veo-3.1": 0.50,
       "veo-3.1-fast": 0.25,
@@ -89,7 +86,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ videoUrl });
+    return NextResponse.json({ videoUrl, generationId });
   } catch (error) {
     await prisma.generation.update({
       where: { id: generationId },

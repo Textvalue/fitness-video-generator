@@ -32,8 +32,28 @@ export async function POST(req: NextRequest) {
   const exerciseName = (exercise.name as Record<string, string>).en || "exercise";
   const exerciseDesc = (exercise.description as Record<string, string>).en || "";
 
-  // Compose the image generation prompt
-  const prompt = `Generate a photorealistic image of a fitness trainer in the starting position of "${exerciseName}".
+  // Fetch trainer image first so we can tailor the prompt
+  let trainerBase64: string | undefined;
+  try {
+    const trainerRes = await fetch(trainer.baseImageUrl);
+    if (trainerRes.ok) {
+      const trainerBuffer = Buffer.from(await trainerRes.arrayBuffer());
+      if (trainerBuffer.length < 4 * 1024 * 1024) {
+        trainerBase64 = trainerBuffer.toString("base64");
+      }
+    }
+  } catch {
+    // If we can't fetch the trainer image, generate without reference
+  }
+
+  // Compose the image generation prompt — when we have a reference image,
+  // explicitly instruct the model to match the person's appearance
+  const prompt = trainerBase64
+    ? `Generate a photorealistic image of the EXACT same person shown in the reference photo. This person is a fitness trainer named "${trainer.name}". Show them in the starting position of "${exerciseName}".
+Exercise description: ${exerciseDesc}
+Environment: ${environment.prompt}
+IMPORTANT: The generated person must match the reference photo — same face, same gender, same body type, same skin tone. The trainer should be in proper athletic form, ready to begin the exercise. High quality, 8K, cinematic lighting.`
+    : `Generate a photorealistic image of a fitness trainer named "${trainer.name}" in the starting position of "${exerciseName}".
 Exercise description: ${exerciseDesc}
 Environment: ${environment.prompt}
 The trainer should be in proper athletic form, ready to begin the exercise. High quality, 8K, cinematic lighting.`;
@@ -51,21 +71,6 @@ The trainer should be in proper athletic form, ready to begin the exercise. High
   });
 
   try {
-    // Fetch trainer image and convert to base64
-    let trainerBase64: string | undefined;
-    try {
-      const trainerRes = await fetch(trainer.baseImageUrl);
-      if (trainerRes.ok) {
-        const trainerBuffer = Buffer.from(await trainerRes.arrayBuffer());
-        // Only use as reference if the image is reasonable size (< 4MB)
-        if (trainerBuffer.length < 4 * 1024 * 1024) {
-          trainerBase64 = trainerBuffer.toString("base64");
-        }
-      }
-    } catch {
-      // If we can't fetch the trainer image, generate without reference
-    }
-
     // Try with reference image first, fall back to without
     let result;
     try {
@@ -99,7 +104,7 @@ The trainer should be in proper athletic form, ready to begin the exercise. High
       data: {
         generationId: generation.id,
         apiType: "NANO_BANANA",
-        model: "gemini-2.0-flash-exp",
+        model: "gemini-3.1-flash-image-preview",
         cost: 0.02, // Approximate cost
       },
     });
