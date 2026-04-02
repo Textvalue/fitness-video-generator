@@ -225,13 +225,36 @@ export function LibraryClient({
         body: JSON.stringify({ generationId, veoVersion }),
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }
-      const result = await res.json();
-      setGeneratedVideoUrl(toProxyUrl(result.videoUrl));
-      setStep("done");
+
+      // Poll for completion
+      const poll = async (): Promise<void> => {
+        const statusRes = await fetch(`/api/generations/${generationId}`);
+        if (!statusRes.ok) throw new Error("Failed to check status");
+        const data = await statusRes.json();
+
+        if (data.status === "COMPLETED" && data.videoUrl) {
+          setGeneratedVideoUrl(toProxyUrl(data.videoUrl));
+          setStep("done");
+          setLoading(false);
+          // Refresh generations list
+          setGenerations((prev) => [
+            { id: generationId!, exerciseId: selectedExercise!.id, imageUrl: generatedImageUrl, videoUrl: data.videoUrl, veoVersion, completedAt: new Date().toISOString() },
+            ...prev,
+          ]);
+          return;
+        }
+        if (data.status === "FAILED") {
+          throw new Error(data.errorMessage || "Video generation failed");
+        }
+        // Still generating — poll again in 5s
+        await new Promise((r) => setTimeout(r, 5000));
+        return poll();
+      };
+
+      await poll();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Video generation failed");
       setStep("review");
-    } finally {
       setLoading(false);
     }
   };

@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { after } from "next/server";
 import { prisma } from "@/lib/db";
 import { generateVideo, VeoVersion } from "@/lib/gemini";
 import { uploadFile } from "@/lib/storage";
 import { randomUUID } from "crypto";
 
-export const maxDuration = 300; // 5 min timeout for video generation
+export const maxDuration = 300; // 5 min timeout for background work
 
 export async function POST(req: NextRequest) {
   const { generationId, veoVersion = "veo-3.1" } = await req.json();
@@ -41,66 +42,65 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  try {
-    let imageBase64: string | undefined;
-    if (generation.generatedImageUrl) {
-      try {
-        const imgRes = await fetch(generation.generatedImageUrl);
-        const imgBuffer = Buffer.from(await imgRes.arrayBuffer());
-        imageBase64 = imgBuffer.toString("base64");
-      } catch {
-        // Generate without reference image
+  // Run video generation in the background — response returns immediately
+  after(async () => {
+    try {
+      let imageBase64: string | undefined;
+      if (generation.generatedImageUrl) {
+        try {
+          const imgRes = await fetch(generation.generatedImageUrl);
+          const imgBuffer = Buffer.from(await imgRes.arrayBuffer());
+          imageBase64 = imgBuffer.toString("base64");
+        } catch {
+          // Generate without reference image
+        }
       }
+
+      const result = await generateVideo(videoPrompt, veoVersion as VeoVersion, imageBase64);
+
+      const key = `generations/${generationId}/${randomUUID()}.mp4`;
+      const videoUrl = await uploadFile(key, result.videoBuffer, "video/mp4");
+
+      const costMap: Record<string, number> = {
+        "veo-3.1": 0.50,
+        "veo-3.1-fast": 0.25,
+        "veo-3.0": 0.35,
+      };
+      const videoCost = costMap[veoVersion] || 0.50;
+      const imageCost = generation.imageCost || 0.02;
+
+      await prisma.generation.update({
+        where: { id: generationId },
+        data: {
+          generatedVideoUrl: videoUrl,
+          generatedVideoKey: key,
+          status: "COMPLETED",
+          videoCost,
+          imageCost,
+          totalCost: imageCost + videoCost,
+          completedAt: new Date(),
+        },
+      });
+
+      await prisma.costLog.create({
+        data: {
+          generationId,
+          apiType: "VEO",
+          model: veoVersion,
+          cost: videoCost,
+        },
+      });
+    } catch (error) {
+      await prisma.generation.update({
+        where: { id: generationId },
+        data: {
+          status: "FAILED",
+          errorMessage: error instanceof Error ? error.message : "Unknown error",
+        },
+      });
     }
+  });
 
-    const result = await generateVideo(videoPrompt, veoVersion as VeoVersion, imageBase64);
-
-    const key = `generations/${generationId}/${randomUUID()}.mp4`;
-    const videoUrl = await uploadFile(key, result.videoBuffer, "video/mp4");
-
-    const costMap: Record<string, number> = {
-      "veo-3.1": 0.50,
-      "veo-3.1-fast": 0.25,
-      "veo-3.0": 0.35,
-    };
-    const videoCost = costMap[veoVersion] || 0.50;
-    const imageCost = generation.imageCost || 0.02;
-
-    await prisma.generation.update({
-      where: { id: generationId },
-      data: {
-        generatedVideoUrl: videoUrl,
-        generatedVideoKey: key,
-        status: "COMPLETED",
-        videoCost,
-        imageCost,
-        totalCost: imageCost + videoCost,
-        completedAt: new Date(),
-      },
-    });
-
-    await prisma.costLog.create({
-      data: {
-        generationId,
-        apiType: "VEO",
-        model: veoVersion,
-        cost: videoCost,
-      },
-    });
-
-    return NextResponse.json({ videoUrl, generationId });
-  } catch (error) {
-    await prisma.generation.update({
-      where: { id: generationId },
-      data: {
-        status: "FAILED",
-        errorMessage: error instanceof Error ? error.message : "Unknown error",
-      },
-    });
-
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Video generation failed" },
-      { status: 500 }
-    );
-  }
+  // Return immediately — client polls /api/generations/[id] for status
+  return NextResponse.json({ generationId, status: "VIDEO_GENERATING" });
 }
