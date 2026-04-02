@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-dim": "#94ef00",
+            "inverse-surface": "#f7ffbd",
+            "secondary": "#00e3fd",
+            "surface-tint": "#ddffb1",
+            "primary-container": "#9eff00",
+            "on-tertiary-fixed": "#4b4800",
+            "surface-container-highest": "#232800",
+            "on-tertiary": "#656100",
+            "on-secondary-container": "#e8fbff",
+            "outline-variant": "#454b1b",
+            "on-surface": "#f4fcba",
+            "primary": "#ddffb1",
+            "secondary-dim": "#00d4ec",
+            "tertiary-container": "#f8f05b",
+            "on-background": "#f4fcba",
+            "surface-container-high": "#1d2200",
+            "tertiary-fixed": "#fbf35e",
+            "on-primary": "#3d6700",
+            "secondary-fixed": "#26e6ff",
+            "tertiary": "#fffada",
+            "on-tertiary-fixed-variant": "#696500",
+            "surface-container-low": "#121500",
+            "error-container": "#b92902",
+            "background": "#0d1000",
+            "on-secondary": "#004d57",
+            "on-surface-variant": "#a8b074",
+            "surface-container": "#181c00",
+            "on-tertiary-container": "#5d5900",
+            "on-primary-container": "#375d00",
+            "inverse-on-surface": "#525927",
+            "error": "#ff7351",
+            "outline": "#737a44",
+            "primary-fixed": "#9eff00",
+            "on-primary-fixed": "#2a4900",
+            "primary-fixed-dim": "#94ef00",
+            "surface-variant": "#232800",
+            "tertiary-fixed-dim": "#ece451",
+            "surface": "#0d1000",
+            "surface-dim": "#0d1000",
+            "surface-container-lowest": "#000000",
+            "tertiary-dim": "#ece451",
+            "surface-bright": "#292f00",
+            "on-error": "#450900",
+            "error-dim": "#d53d18",
+            "on-secondary-fixed": "#003a42",
+            "on-error-container": "#ffd2c8",
+            "on-secondary-fixed-variant": "#005964",
+            "secondary-fixed-dim": "#00d7f0",
+            "inverse-primary": "#3f6a00",
+            "on-primary-fixed-variant": "#3e6800",
+            "secondary-container": "#006875"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .kinetic-glass {
+      backdrop-filter: blur(20px);
+      background: rgba(35, 40, 0, 0.4);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-64 flex flex-col border-none bg-stone-950 dark:bg-[#121500] font-['Space_Grotesk'] tracking-tight z-40">
+<div class="p-8">
+<div class="text-2xl font-bold tracking-tighter text-[#ddffb1]">AI Trainer</div>
+<div class="text-[10px] uppercase tracking-widest text-[#a8b074] mt-1">Precision Lab</div>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<div class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#a8b074] hover:text-[#f4fcba] hover:bg-[#1d2200] transition-colors duration-200 cursor-pointer group">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#ddffb1] font-bold border-r-4 border-[#9eff00] bg-[#1d2200] transition-colors duration-200 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-medium">Trainers</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#a8b074] hover:text-[#f4fcba] hover:bg-[#1d2200] transition-colors duration-200 cursor-pointer group">
+<span class="material-symbols-outlined" data-icon="fitness_center">fitness_center</span>
+<span class="font-medium">Library</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#a8b074] hover:text-[#f4fcba] hover:bg-[#1d2200] transition-colors duration-200 cursor-pointer group">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+<span class="font-medium">Pipeline</span>
+</div>
+</nav>
+<div class="px-8 mb-8">
+<button class="w-full py-4 rounded-full bg-gradient-to-r from-primary to-secondary text-on-primary font-bold text-sm tracking-wide transform active:scale-95 transition-all">
+        New Generation
+      </button>
+</div>
+<div class="p-4 space-y-1 mb-8">
+<div class="flex items-center gap-3 px-4 py-2 text-xs text-[#a8b074] hover:text-[#f4fcba] transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="settings">settings</span>
+        Settings
+      </div>
+<div class="flex items-center gap-3 px-4 py-2 text-xs text-[#a8b074] hover:text-[#f4fcba] transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+        Support
+      </div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 h-16 bg-stone-950/80 dark:bg-[#0d1000]/80 backdrop-blur-md flex justify-between items-center w-full px-8 ml-64 max-w-[calc(100%-16rem)] z-30">
+<div class="flex items-center gap-8">
+<span class="text-lg font-black text-[#9eff00] font-headline uppercase">Kinetic Lab</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-[#a8b074] font-['Space_Grotesk'] uppercase text-xs tracking-widest hover:text-[#ddffb1] transition-all" href="#">Projects</a>
+<a class="text-[#9eff00] border-b-2 border-[#9eff00] pb-1 font-['Space_Grotesk'] uppercase text-xs tracking-widest transition-all" href="#">Models</a>
+<a class="text-[#a8b074] font-['Space_Grotesk'] uppercase text-xs tracking-widest hover:text-[#ddffb1] transition-all" href="#">Assets</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative flex items-center bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/10">
+<span class="material-symbols-outlined text-sm text-on-surface-variant mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-[10px] text-on-surface placeholder:text-on-surface-variant tracking-widest w-48 font-label" placeholder="SEARCH ASSETS..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-[#ddffb1]">
+<span class="material-symbols-outlined cursor-pointer hover:opacity-70" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:opacity-70" data-icon="account_circle">account_circle</span>
+<button class="bg-primary text-on-primary px-6 py-1.5 rounded-full font-headline font-bold text-xs uppercase tracking-tighter">Render</button>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="ml-64 pt-16 pb-8 min-h-screen">
+<div class="max-w-7xl mx-auto px-8 pt-12">
+<!-- Header Section -->
+<div class="mb-20 flex justify-between items-end">
+<div>
+<h1 class="font-headline text-5xl font-black text-primary tracking-tighter leading-none mb-4">TRAINER &amp;<br/>ENVIRONMENT</h1>
+<p class="text-on-surface-variant font-label max-w-md">Precision model management for cinematic fitness synthesis. Upload base trainers and configure hyper-realistic environmental presets.</p>
+</div>
+<div class="flex gap-4 mb-2">
+<button class="px-8 py-3 rounded-xl bg-surface-container-highest text-primary font-bold text-sm hover:bg-surface-bright transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="cloud_upload">cloud_upload</span>
+            BATCH UPLOAD
+          </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6 items-start">
+<!-- Left: Trainer Media Gallery (Column 1-8) -->
+<section class="col-span-8 space-y-6">
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-headline text-xl font-bold tracking-tight text-on-surface">TRAINER BASE PHOTOS</h2>
+<span class="text-[10px] font-label text-secondary tracking-widest bg-secondary/10 px-3 py-1 rounded-sm">12 SOURCES ACTIVE</span>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<!-- Large Featured Card -->
+<div class="col-span-2 row-span-2 relative group rounded-xl overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 aspect-[4/3]" data-alt="Close-up cinematic portrait of a professional athletic trainer in a dark high-tech gym with moody teal and lime lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCikj-ktYohAPREBvAPb2AJsvdZhsMsAOiYl59oWMAnzkx4ZbvpiOlgmo5GwphyMLo88YVM9VMEO6vOOvRahIvFZutzlGQYwhdykeK4GhxxxHeSiw4UtEWCPJntOeXyyGt4HTU5jJPulBtMPoqF-YotX3MWwlXJQyA-JZRaiiQExCDcEnl0kk2ibKvAbkji03Oe6QxxLHfC21opnVSycwTTvQU7Py-NojvR_wKEWoaH2B_4wu3LN-AGTLrTHQML7jdMJ-XD0dk_V9w"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+<div>
+<div class="text-[10px] font-label text-primary-dim tracking-[0.2em] mb-1">PRIMARY TRAINER</div>
+<div class="text-2xl font-headline font-black leading-none">MARCUS_V01.RAW</div>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full kinetic-glass flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-all">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Smaller Gallery Items -->
+<div class="relative group rounded-xl overflow-hidden bg-surface-container-highest aspect-square">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" data-alt="Dynamic shot of a female athlete performing a high-intensity workout in a modern industrial fitness studio with neon accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEPqBH3COP9fosN4E4_guq29jQs4Bi6IG9YFBUFiwZuQJiK4mCC9lC6rZCMprGoMfVKjz2ErYsgVrWklhPhXjXes5ZNMDraAh9o50FuoUTU8nuLXnUdNzK8h-nkTHE41WRCLAhuWU6G3flqPSyNoSZLIGrt1G_YyfWGcUFmhWLfTAj_WjO9sM8y0uSYfEESNlR-BmWdICrbp0B49oFyWog2CaOjetyUI22fZHHsU7vBvplofKogLAEyrb17BVo2R_Bee3HFOrQNXw"/>
+<div class="absolute top-4 right-4">
+<span class="material-symbols-outlined text-secondary" data-icon="verified" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="relative group rounded-xl overflow-hidden bg-surface-container-highest aspect-square">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" data-alt="Detailed close-up of high-end fitness apparel fabric and athletic posture in a minimalist dark studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhPVjwGRy1XPZCtplIXbl-kUEE696UgFGmNsVN4ArnfEsoUi5fUKxb5BmPlwgaT_Pk0b_zY4W5Q7eqSSVgeJPc-M2EfdIGAD4L0NLcK0sl_HU8UMrCd2icEzf5IfiyBTws075MlsbalEc6Ua8vPkl-4xqxmDfY1sm24M6YxVfPVw1R1kXqI3LQMQrt1gf1XLETbCHrGTGw8H7m3UKdVQhIufFH54NHFdJF8ZN484cCZv3AJreH80Ilq9frnyJbESloYSd4e4sKIFI"/>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded-full font-headline text-xs font-bold uppercase tracking-widest">Preview</button>
+</div>
+</div>
+<div class="relative group rounded-xl overflow-hidden bg-surface-container-highest aspect-square">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" data-alt="Full body shot of a trainer in a sprinter's starting position on a high-tech indoor track with sharp shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKq0RflpMULOFYkmX9q6KXAyAuyTjhoVN-3K_tp60XfbzFUPECPfNg58Lfz4Y9YDSLJGO9iXpyiOdDoLabk9EZR9BSY2lfNP5Eyd1i7JhnQOCHoHKG0_CqcpxvrMj9c2muwPMcxWyj-hwHQpa6xKZUiLHd1nl_kA3uTfXHNWtVME6QZRZ98hqqyFiXlIfxFpl0m5AbcGCF3V_ReyIuaiz6dv6DMu5ELQaxi65NvB1JyyJZcwpJBuN05t2DzQJyehzXvQ-L7RBbW_c"/>
+</div>
+<div class="relative group rounded-xl overflow-hidden bg-surface-container-highest aspect-square">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" data-alt="Action shot of an athlete during a strength training session with dramatic side-lighting and visible muscle definition" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoGzVzN7AoQYJeWdl2zWem9iYmtIkEt5uBVuB4M4ar6urz0c245PVhBme_HQRSZcvMLgd_0JvhAputL1_yhL2nDapno4p9sOux8o7JP0w_ZehNFToEtFGGQiQ5Ahx3C6aZprs7FvJLwUkdNOgrECBPJJ4F3KmVbuW7Eo90PBbA3yd_bwDdw7cG_NNsdPujvt3ZIgqMZJZBVALu-LD4427pJj867hez73YY7vnkJ6eF1IBqYz7Leungrk6c8YmgDebFr4bRc_LIYzU"/>
+</div>
+<div class="border-2 border-dashed border-outline-variant/30 rounded-xl flex flex-col items-center justify-center aspect-square hover:bg-surface-container-low transition-colors group cursor-pointer">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors text-3xl mb-2" data-icon="add_a_photo">add_a_photo</span>
+<span class="text-[10px] font-headline uppercase tracking-[0.2em] text-on-surface-variant">Add Source</span>
+</div>
+</div>
+</section>
+<!-- Right: Environment Presets (Column 9-12) -->
+<section class="col-span-4 space-y-6">
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-headline text-xl font-bold tracking-tight text-on-surface">ENVIRONMENTS</h2>
+<button class="material-symbols-outlined text-primary" data-icon="tune">tune</button>
+</div>
+<!-- Preset List -->
+<div class="space-y-4">
+<!-- Environment Card 1 -->
+<div class="bg-surface-container-highest rounded-xl p-5 border-l-4 border-primary">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline font-bold text-on-surface uppercase tracking-wide">MODERN GYM</h3>
+<p class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest">Global Lighting: Cinematic Teal</p>
+</div>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="relative group rounded-lg overflow-hidden h-24 mb-4">
+<img class="w-full h-full object-cover opacity-50" data-alt="Ultra-modern minimalist gym interior with matte black equipment and vertical cyan neon light strips" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVkfXCymPQvFgOhzKzXmCHuw9m0N_rObVqX2tANCb2HnlGPgiPPN9A4SvNufFRJYz2x6MdHErYqNRBGpU_p9urX6vU5ldytZ6ypXpSXGyrDnYpXQL85Mw0J9xgU2H3-ayZMva7sVHd2Owphvtlu-FYCvg-hmC-a-xU1pwQerSZKft96AkS-EJK4mBe_jtyGXG4-ygat5XZHNDyia3QXLIQ6Rvhvb7zLN6BUygaWFv2-upHXpPD0Au9sV0I0fdDewgympEC6S1r8NM"/>
+</div>
+<div class="space-y-2">
+<label class="text-[9px] font-label text-on-surface-variant uppercase tracking-widest px-1">AI PROMPT CONFIG</label>
+<div class="bg-surface-container-low rounded-lg p-3 text-xs font-body text-on-surface leading-relaxed border border-outline-variant/10">
+<span class="text-primary">/env</span> minimalist brutalist fitness studio, <span class="text-secondary">hard rim lighting</span>, volcanic rock textures, 8k cinematic render, deep shadows
+                </div>
+</div>
+</div>
+<!-- Environment Card 2 -->
+<div class="bg-surface-container-low hover:bg-surface-container-high transition-all rounded-xl p-5 group cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline font-bold text-on-surface-variant group-hover:text-on-surface uppercase tracking-wide transition-colors">OUTDOOR TRACK</h3>
+<p class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest">Global Lighting: Golden Hour</p>
+</div>
+</div>
+<div class="relative rounded-lg overflow-hidden h-24 mb-4">
+<img class="w-full h-full object-cover opacity-30 grayscale group-hover:grayscale-0 group-hover:opacity-50 transition-all duration-500" data-alt="High-end athletics track in a futuristic urban park during a warm golden sunset with long shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcQBtnVXXMKroTOR8wW8Fv8mMeBzR6WZMWvnrkqjTD_IAbRpd6uj_L8sucr_4IBoXMdmzkJ_zbpUBJ-4vnWvcNuT25mnIPWFKucBbulKV96RNv4QrcBCa4pkOUJruTkNvMYUk_c7abSN6SfAMqMpZV-EBpM4ExSooh9CufK1FC9XY2MWfLvDzHtDpjzj2bwW0eenPwd93RIeA2BS2FKp4S2qVrBJhkUt9mfd2_sJCh85DyWFmxi_W0PveOhhSwPSkHwEY_u1UA_yc"/>
+</div>
+<button class="w-full py-2 text-[10px] font-headline font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary border border-outline-variant/20 rounded-full transition-colors">
+                Configure Preset
+              </button>
+</div>
+<!-- Environment Card 3 -->
+<div class="bg-surface-container-low hover:bg-surface-container-high transition-all rounded-xl p-5 group cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline font-bold text-on-surface-variant group-hover:text-on-surface uppercase tracking-wide transition-colors">ZEN STUDIO</h3>
+<p class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest">Global Lighting: Soft Diffuse</p>
+</div>
+</div>
+<div class="relative rounded-lg overflow-hidden h-24">
+<img class="w-full h-full object-cover opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-40 transition-all duration-500" data-alt="Bright high-end yoga studio with wooden floors and large windows showing a lush forest background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAp7hLd9vveNWTi_qkoIKoe7yRqUC0pbc_MTPEEX42rvo6wE53fefhblMJ6Qb6Co3XM5c6lh2_Z91qqBx8LqR_XRDkWZqml1eUBZn_m6h4UDuWrNngRPCCJXxTjLNO2GvRPr4IRUqH9LrxBJPCSidGkpNWQul-t3PSvZPvjUjWG2f6mdhJOMXEHNaNrbRJo1MMO9ycB9nWvniTt2kBsCx9-nLL42NraYIVsXPgY_uPicteo8gqttZxaOuE4j68wKhBqlNS_1zGk3Vk"/>
+</div>
+</div>
+<!-- New Preset Action -->
+<button class="w-full py-6 rounded-xl border-2 border-dashed border-outline-variant/30 flex flex-col items-center gap-2 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-primary" data-icon="add_location_alt">add_location_alt</span>
+<span class="text-xs font-headline font-bold uppercase tracking-widest text-on-surface-variant">Create New Environment</span>
+</button>
+</div>
+</section>
+</div>
+<!-- Bottom Asset Stats Table -->
+<section class="mt-24 mb-12">
+<div class="flex items-center gap-4 mb-8">
+<h2 class="font-headline text-2xl font-black text-on-surface tracking-tighter uppercase">RESOURCE CONSUMPTION</h2>
+<div class="h-px flex-1 bg-gradient-to-r from-outline-variant/30 to-transparent"></div>
+</div>
+<div class="bg-surface-container-low rounded-2xl overflow-hidden p-1">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-high/50">
+<tr>
+<th class="px-6 py-4 text-[10px] font-label uppercase tracking-[0.2em] text-primary">ASSET NAME</th>
+<th class="px-6 py-4 text-[10px] font-label uppercase tracking-[0.2em] text-on-surface-variant">VERSION</th>
+<th class="px-6 py-4 text-[10px] font-label uppercase tracking-[0.2em] text-on-surface-variant">GEN TIME</th>
+<th class="px-6 py-4 text-[10px] font-label uppercase tracking-[0.2em] text-on-surface-variant">TOKEN COST</th>
+<th class="px-6 py-4 text-[10px] font-label uppercase tracking-[0.2em] text-on-surface-variant">STATUS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<tr class="bg-surface-container-lowest">
+<td class="px-6 py-5 font-headline font-bold text-on-surface">MARCUS_LOD_01</td>
+<td class="px-6 py-5 font-label text-xs text-on-surface-variant">v2.4.1 (Stable)</td>
+<td class="px-6 py-5 font-label text-xs text-on-surface-variant">1m 24s</td>
+<td class="px-6 py-5 font-label text-xs text-secondary">$0.45</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-sm bg-primary/10 text-primary text-[10px] font-bold tracking-widest">OPTIMIZED</span>
+</td>
+</tr>
+<tr class="bg-surface-container-low">
+<td class="px-6 py-5 font-headline font-bold text-on-surface">GYM_MOD_PRESET</td>
+<td class="px-6 py-5 font-label text-xs text-on-surface-variant">v1.0.8 (Alpha)</td>
+<td class="px-6 py-5 font-label text-xs text-on-surface-variant">45s</td>
+<td class="px-6 py-5 font-label text-xs text-secondary">$0.12</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-sm bg-secondary/10 text-secondary text-[10px] font-bold tracking-widest">DRAFT</span>
+</td>
+</tr>
+<tr class="bg-surface-container-lowest">
+<td class="px-6 py-5 font-headline font-bold text-on-surface">TRACK_HIGH_RES</td>
+<td class="px-6 py-5 font-label text-xs text-on-surface-variant">v3.2.0 (Live)</td>
+<td class="px-6 py-5 font-label text-xs text-on-surface-variant">3m 12s</td>
+<td class="px-6 py-5 font-label text-xs text-secondary">$1.10</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-sm bg-primary/10 text-primary text-[10px] font-bold tracking-widest">OPTIMIZED</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="fixed bottom-0 right-0 w-[calc(100%-16rem)] h-8 bg-[#121500] flex justify-between items-center px-6 py-1 z-50 font-['Inter'] text-[10px] uppercase tracking-widest text-[#00e3fd]">
+<div class="flex gap-6">
+<span class="text-[#a8b074]">Status: 4K Render Active</span>
+<span class="text-[#a8b074]">Cost: $1.24/min</span>
+<span class="text-[#a8b074]">API Latency: 45ms</span>
+</div>
+<div class="text-[#a8b074]">© 2024 Kinetic Precision Lab</div>
+</footer>
+</body></html>

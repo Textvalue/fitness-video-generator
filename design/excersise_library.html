@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-dim": "#94ef00",
+            "inverse-surface": "#f7ffbd",
+            "secondary": "#00e3fd",
+            "surface-tint": "#ddffb1",
+            "primary-container": "#9eff00",
+            "on-tertiary-fixed": "#4b4800",
+            "surface-container-highest": "#232800",
+            "on-tertiary": "#656100",
+            "on-secondary-container": "#e8fbff",
+            "outline-variant": "#454b1b",
+            "on-surface": "#f4fcba",
+            "primary": "#ddffb1",
+            "secondary-dim": "#00d4ec",
+            "tertiary-container": "#f8f05b",
+            "on-background": "#f4fcba",
+            "surface-container-high": "#1d2200",
+            "tertiary-fixed": "#fbf35e",
+            "on-primary": "#3d6700",
+            "secondary-fixed": "#26e6ff",
+            "tertiary": "#fffada",
+            "on-tertiary-fixed-variant": "#696500",
+            "surface-container-low": "#121500",
+            "error-container": "#b92902",
+            "background": "#0d1000",
+            "on-secondary": "#004d57",
+            "on-surface-variant": "#a8b074",
+            "surface-container": "#181c00",
+            "on-tertiary-container": "#5d5900",
+            "on-primary-container": "#375d00",
+            "inverse-on-surface": "#525927",
+            "error": "#ff7351",
+            "outline": "#737a44",
+            "primary-fixed": "#9eff00",
+            "on-primary-fixed": "#2a4900",
+            "primary-fixed-dim": "#94ef00",
+            "surface-variant": "#232800",
+            "tertiary-fixed-dim": "#ece451",
+            "surface": "#0d1000",
+            "surface-dim": "#0d1000",
+            "surface-container-lowest": "#000000",
+            "tertiary-dim": "#ece451",
+            "surface-bright": "#292f00",
+            "on-error": "#450900",
+            "error-dim": "#d53d18",
+            "on-secondary-fixed": "#003a42",
+            "on-error-container": "#ffd2c8",
+            "on-secondary-fixed-variant": "#005964",
+            "secondary-fixed-dim": "#00d7f0",
+            "inverse-primary": "#3f6a00",
+            "on-primary-fixed-variant": "#3e6800",
+            "secondary-container": "#006875"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0d1000; }
+    ::-webkit-scrollbar-thumb { background: #232800; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #454b1b; }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
+<!-- SideNavBar Anchor -->
+<aside class="fixed left-0 top-0 h-full z-40 bg-stone-950 dark:bg-[#121500] w-64 flex flex-col border-none font-['Space_Grotesk'] tracking-tight">
+<div class="p-8">
+<div class="text-2xl font-bold tracking-tighter text-[#ddffb1] flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+        AI Trainer
+      </div>
+<div class="text-[#a8b074] text-xs uppercase tracking-widest">Precision Lab</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<div class="flex items-center gap-3 p-3 rounded-lg text-[#a8b074] hover:text-[#f4fcba] hover:bg-[#1d2200] transition-colors duration-200 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg text-[#a8b074] hover:text-[#f4fcba] hover:bg-[#1d2200] transition-colors duration-200 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span>Trainers</span>
+</div>
+<!-- Active State Logic: Library is the current page -->
+<div class="flex items-center gap-3 p-3 rounded-lg text-[#ddffb1] font-bold border-r-4 border-[#9eff00] bg-[#1d2200] cursor-pointer">
+<span class="material-symbols-outlined" data-icon="fitness_center">fitness_center</span>
+<span>Library</span>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg text-[#a8b074] hover:text-[#f4fcba] hover:bg-[#1d2200] transition-colors duration-200 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+<span>Pipeline</span>
+</div>
+</nav>
+<div class="p-6">
+<button class="w-full bg-gradient-to-r from-primary to-secondary py-4 rounded-full text-on-primary font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+        New Generation
+      </button>
+</div>
+<div class="p-4 border-t border-outline-variant/10 space-y-1">
+<div class="flex items-center gap-3 p-3 text-[#a8b074] hover:text-[#f4fcba] cursor-pointer">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-sm">Settings</span>
+</div>
+<div class="flex items-center gap-3 p-3 text-[#a8b074] hover:text-[#f4fcba] cursor-pointer">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="text-sm">Support</span>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 min-h-screen flex flex-col relative pb-12">
+<!-- TopNavBar Anchor -->
+<header class="flex justify-between items-center w-full px-12 h-16 bg-stone-950/80 dark:bg-[#0d1000]/80 backdrop-blur-md sticky top-0 z-30">
+<div class="flex items-center gap-12">
+<div class="text-lg font-black text-[#9eff00] font-headline uppercase tracking-widest">Kinetic Lab</div>
+<nav class="flex gap-8">
+<a class="font-['Space_Grotesk'] uppercase text-xs tracking-widest text-[#a8b074] hover:text-[#ddffb1]" href="#">Projects</a>
+<a class="font-['Space_Grotesk'] uppercase text-xs tracking-widest text-[#a8b074] hover:text-[#ddffb1]" href="#">Models</a>
+<a class="font-['Space_Grotesk'] uppercase text-xs tracking-widest text-[#9eff00] border-b-2 border-[#9eff00] pb-1" href="#">Assets</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="bg-surface-container-low border-none rounded-full py-1.5 pl-10 pr-4 text-[10px] tracking-widest font-bold focus:ring-1 focus:ring-primary w-48 text-on-surface placeholder:text-on-surface-variant/50" placeholder="SEARCH ASSETS..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-[#ddffb1]">
+<span class="material-symbols-outlined cursor-pointer hover:scale-110 transition-transform" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:scale-110 transition-transform" data-icon="account_circle">account_circle</span>
+<button class="bg-primary text-on-primary px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter">Render</button>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="p-12 max-w-7xl mx-auto w-full">
+<!-- Editorial Header -->
+<div class="flex justify-between items-end mb-16">
+<div>
+<h1 class="font-headline font-black text-6xl text-on-surface leading-none tracking-tighter mb-4">EXERCISE<br/><span class="text-primary-dim">LIBRARY</span></h1>
+<p class="text-on-surface-variant max-w-md font-body leading-relaxed">Centralized repository for kinematically mapped movements. These presets define the prompt-logic for AI video generation.</p>
+</div>
+<div class="flex flex-col items-end gap-4">
+<div class="flex gap-2">
+<span class="bg-surface-container-highest px-3 py-1 rounded-sm text-[10px] font-bold tracking-widest text-secondary border border-secondary/20 uppercase">48 Active Assets</span>
+<span class="bg-surface-container-highest px-3 py-1 rounded-sm text-[10px] font-bold tracking-widest text-primary border border-primary/20 uppercase">V2.4 Engine</span>
+</div>
+<button class="bg-surface-bright hover:bg-primary hover:text-on-primary transition-all duration-300 text-primary border border-primary/30 px-8 py-3 rounded-full flex items-center gap-3 group">
+<span class="material-symbols-outlined text-lg" data-icon="add_circle">add_circle</span>
+<span class="font-headline font-bold uppercase tracking-widest text-sm">Add New Exercise</span>
+</button>
+</div>
+</div>
+<!-- Bento Grid Assets -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Big Featured Item -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-low rounded-xl overflow-hidden relative group h-[400px]">
+<img class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700" data-alt="dramatic wide shot of a muscular athlete performing a back squat in a dark industrial gym with cinematic lighting and smoke" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc1tZIzFDTaQNsDxH2_GTFFuWH5P-iJVvAgidXWsJzrctjuJ4nBM70mYSSXRIWxOn5xXMo59GfWtK_cwVV4aicSxvmJ02a7coUn3G7tctc0XPWTIjTj6RT4kLXT9IDGHX4rOIHVmvxkBki06AtSZv7O9Otwou9g15HFLc-0mfeZkhwGIkscATAMyHFiCTLeI6Bvz97IfpaD-nlpSqJpSKsL7c3O-Qb_Gk6JWIT7p2aMaYO8nYROionCP7r8B7zhNmKMujC61CICJs"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-10 w-full flex justify-between items-end">
+<div>
+<div class="bg-secondary/10 backdrop-blur-md text-secondary text-[10px] font-black px-3 py-1 rounded mb-4 inline-block tracking-widest">FEATURED ASSET</div>
+<h2 class="font-headline font-black text-5xl tracking-tighter text-on-surface uppercase mb-2">Back Squat</h2>
+<p class="text-on-surface-variant max-w-lg text-sm leading-relaxed mb-6">"Hyper-realistic 4K render of Olympic back squat, focusing on femur-to-floor parallel alignment. Lighting: high-contrast rim lighting, charcoal floor texture, sweat particle simulation active."</p>
+<div class="flex gap-4">
+<button class="bg-primary px-6 py-2 rounded-full text-on-primary font-black text-xs uppercase tracking-widest">Edit Prompt</button>
+<button class="bg-surface-container-highest/60 backdrop-blur-md px-6 py-2 rounded-full text-on-surface font-black text-xs uppercase tracking-widest">Preview AI</button>
+</div>
+</div>
+<div class="flex flex-col items-end text-right">
+<span class="text-on-surface-variant text-[10px] uppercase tracking-widest mb-1">Complexity</span>
+<div class="flex gap-1 mb-6">
+<div class="h-1 w-6 bg-primary"></div>
+<div class="h-1 w-6 bg-primary"></div>
+<div class="h-1 w-6 bg-primary"></div>
+<div class="h-1 w-6 bg-surface-container-highest"></div>
+</div>
+<span class="material-symbols-outlined text-4xl text-secondary" data-icon="shutter_speed">shutter_speed</span>
+</div>
+</div>
+</div>
+<!-- Sidebar Filter / Status -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<div class="bg-surface-container-highest p-8 rounded-xl flex-1 border-b-2 border-primary">
+<h3 class="font-headline font-black text-xl uppercase tracking-tighter mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="analytics">analytics</span>
+              Asset Stats
+            </h3>
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<span class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">Avg Render Cost</span>
+<span class="text-primary font-headline font-bold text-lg">$1.42/v</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">Top Category</span>
+<span class="text-on-surface font-headline font-bold text-lg uppercase">Legs</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">Latent Space Vol</span>
+<span class="text-on-surface font-headline font-bold text-lg uppercase">4.2 GB</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-8 rounded-xl flex-1">
+<h3 class="font-headline font-black text-xl uppercase tracking-tighter mb-4">Quick Search</h3>
+<div class="space-y-3">
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container-highest text-on-surface text-[10px] font-bold px-4 py-2 rounded uppercase border border-outline-variant/30 hover:border-primary cursor-pointer transition-colors">Compound</span>
+<span class="bg-surface-container-highest text-on-surface text-[10px] font-bold px-4 py-2 rounded uppercase border border-outline-variant/30 hover:border-primary cursor-pointer transition-colors">Isolation</span>
+<span class="bg-surface-container-highest text-on-surface text-[10px] font-bold px-4 py-2 rounded uppercase border border-outline-variant/30 hover:border-primary cursor-pointer transition-colors">Upper Body</span>
+<span class="bg-surface-container-highest text-on-surface text-[10px] font-bold px-4 py-2 rounded uppercase border border-outline-variant/30 hover:border-primary cursor-pointer transition-colors">Cardio</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Exercise Item 2 -->
+<div class="col-span-12 md:col-span-6 lg:col-span-4 bg-surface-container-highest rounded-xl overflow-hidden group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" data-alt="close up shot of a person hands gripping a barbell during a heavy deadlift, chalk dust in the air, intense low-key lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy3yanaZ_SmYVf2oFJpuCJkOWpCpS_by9rl7AiRugNEUnnpYH6bs_uwW1__BfTyQXVW3pfEkd7pF_52izvwyufch-9MWQ4mdbNvsvZkZusMW71ScAWAUNK-FYa9dvq2CxF4K9Sh2_1UaDb21ywlvCmwtIk0Xzwmua0NKjuqlaaROTfsEpO5IJf5Ksq3NFq6u8owFpk1Yek_bjsSkutH_z9lw50zqw71rpiSZc_sVQ_ySPuKYRtqqXukIK15ApPjKNqg9pGY-AhNqs"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="absolute top-4 right-4 flex gap-2">
+<button class="w-8 h-8 rounded-full bg-background/80 backdrop-blur-md flex items-center justify-center hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+</button>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-3">
+<h3 class="font-headline font-bold text-2xl uppercase tracking-tighter">Deadlift</h3>
+<span class="text-[10px] font-black text-secondary tracking-widest border border-secondary/30 px-2 py-0.5">ELITE</span>
+</div>
+<p class="text-xs text-on-surface-variant font-body leading-relaxed mb-6 line-clamp-2">"Cinematic ground-level tracking shot. Emphasize spinal neutrality and explosive hip hinge motion. Apply 'Dust &amp; Grit' post-process filter."</p>
+<div class="flex justify-between items-center pt-4 border-t border-outline-variant/20">
+<span class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant">Tag: Posterior Chain</span>
+<span class="material-symbols-outlined text-primary" data-icon="play_circle">play_circle</span>
+</div>
+</div>
+</div>
+<!-- Exercise Item 3 -->
+<div class="col-span-12 md:col-span-6 lg:col-span-4 bg-surface-container-highest rounded-xl overflow-hidden group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" data-alt="low angle shot of a man doing bench press in a futuristic gym setting with blue and green neon lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLOMuSp2CEvzmHUuT8L_s4IRiaNVDzCv8xS1A5NfrUR_2398x962vjiipdtzEFqgACodkhoAmDS-HUlsRx1OnbWCosuiU1XgCnWSCypp4iK2XTnh-Amnv3A6fLrZkTnTr27ayF_K5URwlTNNiQXixIjxf9ey1ZqEQdn94syoN82e8W2v3Zkshc2p6susNjU0FtRSe6r5Mo43shRiV9iPrDGHOllXrKFzlVBbXJ0e02_mmkO7G5n39c-rU8TDlSB51c16I-SrgC5Vw"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="absolute top-4 right-4 flex gap-2">
+<button class="w-8 h-8 rounded-full bg-background/80 backdrop-blur-md flex items-center justify-center hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+</button>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-3">
+<h3 class="font-headline font-bold text-2xl uppercase tracking-tighter">Bench Press</h3>
+<span class="text-[10px] font-black text-on-surface-variant tracking-widest border border-outline-variant/30 px-2 py-0.5">CORE</span>
+</div>
+<p class="text-xs text-on-surface-variant font-body leading-relaxed mb-6 line-clamp-2">"Top-down symmetrical angle. Controlled eccentric phase. Lighting: cold studio white. Reflection mapping on chrome bar active."</p>
+<div class="flex justify-between items-center pt-4 border-t border-outline-variant/20">
+<span class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant">Tag: Chest/Push</span>
+<span class="material-symbols-outlined text-primary" data-icon="play_circle">play_circle</span>
+</div>
+</div>
+</div>
+<!-- Exercise Item 4 -->
+<div class="col-span-12 md:col-span-6 lg:col-span-4 bg-surface-container-highest rounded-xl overflow-hidden group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" data-alt="athlete in silhouette performing pull ups against a large circular window during sunset, dramatic light rays" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy6NvyFhtJkZwmw0SqUi41X9pO45BJeCzj31Yl2FIaNmSBwkimoBX-BJA4j5xgxABaZaitiUHOHJop1fzbf9z-4MMSHd_kbMmJBb2UlMGdSwtePb4UCMBr65PUX8BbiiNLodJpIhk3518fKhBJPtW4oJehfkh65Dnx1oB22kmnv_DSC75RlzBY7YotE98bJa3kB5OnvZteOdjxUa3v1x7x0nlh_fagnTHDQBAAELhxO7vZT8VTa6vz0msd49eRh3dyUFaGvDHJ2FQ"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="absolute top-4 right-4 flex gap-2">
+<button class="w-8 h-8 rounded-full bg-background/80 backdrop-blur-md flex items-center justify-center hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+</button>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-3">
+<h3 class="font-headline font-bold text-2xl uppercase tracking-tighter">Pull Up</h3>
+<span class="text-[10px] font-black text-on-surface-variant tracking-widest border border-outline-variant/30 px-2 py-0.5">CORE</span>
+</div>
+<p class="text-xs text-on-surface-variant font-body leading-relaxed mb-6 line-clamp-2">"Rear view 45-degree angle. Focus on latissimus dorsi expansion. High shutter speed for crisp muscle definition."</p>
+<div class="flex justify-between items-center pt-4 border-t border-outline-variant/20">
+<span class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant">Tag: Back/Pull</span>
+<span class="material-symbols-outlined text-primary" data-icon="play_circle">play_circle</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Anchor -->
+<footer class="fixed bottom-0 right-0 w-[calc(100%-16rem)] h-8 bg-[#121500] flex justify-between items-center px-6 py-1 z-50 font-['Inter'] text-[10px] uppercase tracking-widest text-[#00e3fd]">
+<div class="flex gap-6">
+<span class="text-[#a8b074]">Status: 4K Render Active</span>
+<span class="text-[#a8b074]">Cost: $1.24/min</span>
+<span class="text-[#a8b074]">API Latency: 45ms</span>
+</div>
+<div class="text-[#a8b074]">© 2024 Kinetic Precision Lab</div>
+</footer>
+</main>
+<!-- Contextual FAB - Only for Add Action -->
+<div class="fixed bottom-12 right-8 z-[60]">
+<button class="w-16 h-16 rounded-full bg-primary text-on-primary shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+<div class="absolute right-full mr-4 bg-surface-container-highest text-on-surface px-4 py-2 rounded-lg text-xs font-bold tracking-widest opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-primary/20">
+        NEW EXERCISE
+      </div>
+</button>
+</div>
+</body></html>

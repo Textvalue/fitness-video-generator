@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-dim": "#94ef00",
+            "inverse-surface": "#f7ffbd",
+            "secondary": "#00e3fd",
+            "surface-tint": "#ddffb1",
+            "primary-container": "#9eff00",
+            "on-tertiary-fixed": "#4b4800",
+            "surface-container-highest": "#232800",
+            "on-tertiary": "#656100",
+            "on-secondary-container": "#e8fbff",
+            "outline-variant": "#454b1b",
+            "on-surface": "#f4fcba",
+            "primary": "#ddffb1",
+            "secondary-dim": "#00d4ec",
+            "tertiary-container": "#f8f05b",
+            "on-background": "#f4fcba",
+            "surface-container-high": "#1d2200",
+            "tertiary-fixed": "#fbf35e",
+            "on-primary": "#3d6700",
+            "secondary-fixed": "#26e6ff",
+            "tertiary": "#fffada",
+            "on-tertiary-fixed-variant": "#696500",
+            "surface-container-low": "#121500",
+            "error-container": "#b92902",
+            "background": "#0d1000",
+            "on-secondary": "#004d57",
+            "on-surface-variant": "#a8b074",
+            "surface-container": "#181c00",
+            "on-tertiary-container": "#5d5900",
+            "on-primary-container": "#375d00",
+            "inverse-on-surface": "#525927",
+            "error": "#ff7351",
+            "outline": "#737a44",
+            "primary-fixed": "#9eff00",
+            "on-primary-fixed": "#2a4900",
+            "primary-fixed-dim": "#94ef00",
+            "surface-variant": "#232800",
+            "tertiary-fixed-dim": "#ece451",
+            "surface": "#0d1000",
+            "surface-dim": "#0d1000",
+            "surface-container-lowest": "#000000",
+            "tertiary-dim": "#ece451",
+            "surface-bright": "#292f00",
+            "on-error": "#450900",
+            "error-dim": "#d53d18",
+            "on-secondary-fixed": "#003a42",
+            "on-error-container": "#ffd2c8",
+            "on-secondary-fixed-variant": "#005964",
+            "secondary-fixed-dim": "#00d7f0",
+            "inverse-primary": "#3f6a00",
+            "on-primary-fixed-variant": "#3e6800",
+            "secondary-container": "#006875"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body {
+      background-color: #0d1000;
+      color: #f4fcba;
+    }
+    .kinetic-glass {
+      background: rgba(35, 40, 0, 0.4);
+      backdrop-filter: blur(20px);
+    }
+    .asymmetric-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+    }
+  </style>
+</head>
+<body class="font-body selection:bg-primary selection:text-on-primary">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-64 flex flex-col border-none bg-stone-950 dark:bg-[#121500] z-40 font-['Space_Grotesk'] tracking-tight">
+<div class="p-8">
+<div class="text-2xl font-bold tracking-tighter text-[#ddffb1]">AI Trainer</div>
+<div class="text-[10px] uppercase tracking-[0.2em] text-[#a8b074] mt-1">Precision Lab</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<!-- Active: Dashboard -->
+<a class="flex items-center px-4 py-3 text-[#ddffb1] font-bold border-r-4 border-[#9eff00] bg-[#1d2200] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+        Dashboard
+      </a>
+<a class="flex items-center px-4 py-3 text-[#a8b074] hover:text-[#f4fcba] hover:bg-[#1d2200] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">psychology</span>
+        Trainers
+      </a>
+<a class="flex items-center px-4 py-3 text-[#a8b074] hover:text-[#f4fcba] hover:bg-[#1d2200] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">fitness_center</span>
+        Library
+      </a>
+<a class="flex items-center px-4 py-3 text-[#a8b074] hover:text-[#f4fcba] hover:bg-[#1d2200] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">settings_input_component</span>
+        Pipeline
+      </a>
+</nav>
+<div class="px-4 py-6 mt-auto space-y-1">
+<button class="w-full mb-6 py-3 px-4 bg-gradient-to-br from-[#ddffb1] to-[#00e3fd] text-on-primary font-bold rounded-full text-sm flex items-center justify-center gap-2 transform active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+        New Generation
+      </button>
+<a class="flex items-center px-4 py-2 text-[#a8b074] hover:text-[#f4fcba] text-sm transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-lg">settings</span>
+        Settings
+      </a>
+<a class="flex items-center px-4 py-2 text-[#a8b074] hover:text-[#f4fcba] text-sm transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-lg">help</span>
+        Support
+      </a>
+</div>
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional male digital artist in a dark tech-focused studio environment with moody lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_BS4AO-SAClnJPGlDPJxdquap8NCfcSdjcQ1zI4aKwZ7eeUkUnTwVNWQTaX1WSu-VgcPEQ-viVfovE0MXyZuUnO_QjQlFLMporM8DmXiqnnE75kTl38QUNR_I72Mp4TRSmmJW5pHI23Yv9Cf6NJK9gBTlj5hZxV-49AqF8HdSv2vF3v9PGk7Wd0a1q7m0wrG8CqgGNqEMTTja9EEyU9HAavdytkux-eeAlQS_U6GiJvpfgCQ3ktVTUz1IjyOm-kUWDqnGh0teBkE"/>
+</div>
+<div>
+<div class="text-xs font-bold text-on-surface">Alex Rivera</div>
+<div class="text-[10px] text-on-surface-variant">Pro Director</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-stone-950/80 dark:bg-[#0d1000]/80 backdrop-blur-md z-30 flex justify-between items-center px-8 transition-all duration-300">
+<div class="flex items-center gap-8">
+<span class="text-lg font-black text-[#9eff00] font-headline">Kinetic Lab</span>
+<nav class="hidden lg:flex gap-6 font-['Space_Grotesk'] uppercase text-xs tracking-widest">
+<a class="text-[#9eff00] border-b-2 border-[#9eff00] pb-1" href="#">Projects</a>
+<a class="text-[#a8b074] hover:text-[#ddffb1]" href="#">Models</a>
+<a class="text-[#a8b074] hover:text-[#ddffb1]" href="#">Assets</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#a8b074] text-lg">search</span>
+<input class="bg-surface-container-low border-none rounded-full py-1.5 pl-10 pr-4 text-[10px] font-headline tracking-widest text-on-surface focus:ring-1 focus:ring-primary w-48 transition-all" placeholder="SEARCH ASSETS..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-[#ddffb1]">
+<button class="relative hover:text-white transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-1.5 h-1.5 bg-secondary rounded-full"></span>
+</button>
+<button class="hover:text-white transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+<button class="bg-primary text-on-primary px-6 py-1.5 rounded-full font-headline font-black text-[10px] tracking-widest hover:bg-primary-dim transition-colors">
+          RENDER
+        </button>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="ml-64 pt-24 pb-12 px-8 min-h-screen">
+<!-- Hero Metrics Section -->
+<section class="mb-12">
+<div class="flex items-end justify-between mb-8">
+<div>
+<h1 class="text-5xl font-black font-headline tracking-tighter text-on-surface">Dashboard</h1>
+<p class="text-on-surface-variant font-body mt-2">Operational overview for session <span class="text-secondary">#KR-2024-09X</span></p>
+</div>
+<div class="text-right">
+<div class="text-[10px] uppercase tracking-widest text-on-surface-variant font-headline">Status</div>
+<div class="flex items-center gap-2 text-primary">
+<span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+<span class="font-headline font-bold text-lg">SYSTEMS NOMINAL</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Metric Card 1 -->
+<div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden group">
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-9xl">movie</span>
+</div>
+<div class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant font-headline mb-4">Total Videos Generated</div>
+<div class="text-4xl font-black font-headline text-on-surface">1,284</div>
+<div class="mt-4 flex items-center text-primary text-xs font-bold">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span>
+            +12% from last cycle
+          </div>
+</div>
+<!-- Metric Card 2 -->
+<div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden group">
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-9xl">speed</span>
+</div>
+<div class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant font-headline mb-4">Recent Generations</div>
+<div class="text-4xl font-black font-headline text-on-surface">42</div>
+<div class="mt-4 flex items-center text-secondary text-xs font-bold">
+<span class="material-symbols-outlined text-sm mr-1">timer</span>
+            Avg. Render: 4.2s
+          </div>
+</div>
+<!-- Metric Card 3 -->
+<div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden group">
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-9xl">payments</span>
+</div>
+<div class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant font-headline mb-4">Total API Cost</div>
+<div class="text-4xl font-black font-headline text-on-surface">$3,142.00</div>
+<div class="mt-4 flex items-center text-error text-xs font-bold">
+<span class="material-symbols-outlined text-sm mr-1">warning</span>
+            85% of monthly quota
+          </div>
+</div>
+</div>
+</section>
+<!-- Content Split -->
+<div class="asymmetric-grid">
+<!-- Recent Projects Grid -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-headline font-bold text-on-surface">Recent Projects</h2>
+<button class="text-xs font-headline tracking-widest text-primary hover:underline uppercase">View All Assets</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container-highest rounded-xl overflow-hidden group transition-all duration-300 hover:translate-y-[-4px]">
+<div class="aspect-video relative overflow-hidden">
+<img alt="Gym Cinematics" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Cinematic wide shot of a high-end futuristic gym with neon lighting and high-tech equipment in a dark atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy7Ctj4iLHDd-s6BZIe5cbQrnk3C4uVpRHu8BOQ3Ey-nx0nv1IFNqS0G3odKSOtN1RRhbWvuZAHYQfHH1MKJALJ0nii3p2YaLPDbZ-zlUzR4-FGRYCUsL8g5ggU43c90Ge-JEUqao1Zj5xt4Mf0AA-JhckJZO_NLtSpwou2xuYNVhgZV2oVhMmd_mBjegoJ07gTJ0hTZFivAg42mwxGOX5IVVrd0zUEYKvy5jOcLZrORwdu09SAW1MJ493M3o1GLqAjNXtLBXQ_UE"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 bg-secondary/80 backdrop-blur-md rounded-full flex items-center justify-center text-on-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<div class="absolute top-3 left-3 flex gap-2">
+<span class="bg-secondary-container/40 backdrop-blur-md text-on-secondary-container text-[8px] px-2 py-0.5 rounded uppercase tracking-widest font-bold">4K Render</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline font-bold text-on-surface">HIIT Session - Pro 01</h3>
+<span class="text-[10px] text-on-surface-variant font-headline uppercase">2m ago</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-1 mb-4">Prompt: Cinematic tracking shot of athletes in a dark warehouse gym...</p>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+<span class="text-[10px] font-headline uppercase tracking-widest text-primary">Completed</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-highest rounded-xl overflow-hidden group transition-all duration-300 hover:translate-y-[-4px]">
+<div class="aspect-video relative overflow-hidden">
+<img alt="Cyber Yoga" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Serene digital art piece showing a yoga silhouette in a geometric neon garden with floating particles and deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMk3VZ3y7stx04f7xFVCYWfDm9_VmJMuKaK93CriIbC9ZILVI_jE5WY6Da6NV_owdSXePztFpqSZaL2ct-PEy7CNlv2y8tVojsTT4jNYm6IrCXmWLSTKcNTy61c6roCoXcarSMrJqc2zydRZnYd3K9f7TJ0rw707knD0CSMXS6tukrFxiTwwUXovNTxan0s4qaP1P8AwTAlAz3MuTTzFY_fKH7fnELZtyWgwgDiP3T6bIFk0Pg3Gjat_Nyi3ph_KisdNWT2D1pNoI"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 bg-secondary/80 backdrop-blur-md rounded-full flex items-center justify-center text-on-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<div class="absolute top-3 left-3 flex gap-2">
+<span class="bg-secondary-container/40 backdrop-blur-md text-on-secondary-container text-[8px] px-2 py-0.5 rounded uppercase tracking-widest font-bold">AI Gen</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline font-bold text-on-surface">Cyber Yoga Zen</h3>
+<span class="text-[10px] text-on-surface-variant font-headline uppercase">15m ago</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-1 mb-4">Prompt: Abstract flow of energy around a yoga practitioner in neon gardens...</p>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+<span class="text-[10px] font-headline uppercase tracking-widest text-primary">Completed</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-highest rounded-xl overflow-hidden group transition-all duration-300 hover:translate-y-[-4px]">
+<div class="aspect-video relative overflow-hidden bg-surface-container-low">
+<div class="w-full h-full flex flex-col items-center justify-center gap-3">
+<div class="relative w-16 h-1 bg-surface-container-highest overflow-hidden rounded-full">
+<div class="absolute inset-0 bg-secondary w-2/3 animate-pulse"></div>
+</div>
+<span class="text-[10px] font-headline uppercase tracking-widest text-secondary">Processing 68%</span>
+</div>
+<div class="absolute top-3 left-3 flex gap-2">
+<span class="bg-error-container/40 backdrop-blur-md text-on-error-container text-[8px] px-2 py-0.5 rounded uppercase tracking-widest font-bold">Deepfake-Ready</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline font-bold text-on-surface">Advanced Gait Analysis</h3>
+<span class="text-[10px] text-on-surface-variant font-headline uppercase">In Progress</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-1 mb-4">Prompt: Slow motion mechanical skeleton overlay on pro runner...</p>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-secondary rounded-full animate-ping"></span>
+<span class="text-[10px] font-headline uppercase tracking-widest text-secondary">Rendering...</span>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-highest rounded-xl overflow-hidden group transition-all duration-300 hover:translate-y-[-4px]">
+<div class="aspect-video relative overflow-hidden">
+<img alt="Weightlift Master" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Professional athlete performing a heavy barbell squat in a dark studio with dramatic rim lighting and dust particles in the air" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd-aOkd56KGb-pHLJflAQ95KhgOmNSNPSSFq-WkwBz4JPHIXMR4hsTERXB5KmLMCjqYwjfSvZfLlzCq9BTYV9Al5zidP-tbZaLlHNvwwiarGsK9_vEGkwt01Y25fL-jOp0kwl2uzjZ2UtfPJJbVbAkEc8PLBRlLqIm-WQCNqvKEqoh42q9hkw8GucT9PbXkCj0ZFpImqfYR4xgsH-kGgVQiD70OJOLpZtacD4ldpqzHQmIT_dj7Yv-Vr9ez0k3eJpH3tutYS1XzrY"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 bg-secondary/80 backdrop-blur-md rounded-full flex items-center justify-center text-on-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline font-bold text-on-surface">Hyper-Real Squat Form</h3>
+<span class="text-[10px] text-on-surface-variant font-headline uppercase">1h ago</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-1 mb-4">Prompt: High contrast lighting, 120fps slow motion of professional squat form...</p>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+<span class="text-[10px] font-headline uppercase tracking-widest text-primary">Completed</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sidebar Controls / Live Feed -->
+<aside class="space-y-6">
+<div class="bg-surface-container-low p-6 rounded-xl">
+<h2 class="text-xs font-headline tracking-widest text-primary uppercase mb-6">Quick Prompt</h2>
+<textarea class="w-full bg-surface-container-lowest border-none rounded-lg p-4 text-xs font-body text-on-surface h-32 focus:ring-1 focus:ring-primary placeholder:text-on-surface-variant/30" placeholder="Describe the scene you want to generate..."></textarea>
+<div class="mt-4 flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-highest text-[9px] font-bold uppercase tracking-tighter text-on-surface-variant rounded-sm cursor-pointer hover:bg-surface-bright">Cinematic</span>
+<span class="px-2 py-1 bg-surface-container-highest text-[9px] font-bold uppercase tracking-tighter text-on-surface-variant rounded-sm cursor-pointer hover:bg-surface-bright">8K UHD</span>
+<span class="px-2 py-1 bg-surface-container-highest text-[9px] font-bold uppercase tracking-tighter text-on-surface-variant rounded-sm cursor-pointer hover:bg-surface-bright">Slow Motion</span>
+</div>
+<button class="w-full mt-6 py-2 bg-primary text-on-primary font-headline font-black text-xs tracking-widest rounded-full hover:shadow-[0_0_15px_rgba(221,255,177,0.4)] transition-all">
+            GENERATE PREVIEW
+          </button>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl">
+<h2 class="text-xs font-headline tracking-widest text-secondary uppercase mb-6">Live Pipeline</h2>
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 bg-primary rounded-full"></div>
+<div class="flex-1">
+<div class="text-[10px] font-bold text-on-surface uppercase">Model Training: V-Alpha</div>
+<div class="w-full h-1 bg-surface-container-highest rounded-full mt-1">
+<div class="w-full h-full bg-primary rounded-full"></div>
+</div>
+</div>
+<div class="text-[9px] text-on-surface-variant">READY</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 bg-secondary rounded-full animate-pulse"></div>
+<div class="flex-1">
+<div class="text-[10px] font-bold text-on-surface uppercase">Physics Engine: Kinetic</div>
+<div class="w-full h-1 bg-surface-container-highest rounded-full mt-1">
+<div class="w-3/4 h-full bg-secondary rounded-full"></div>
+</div>
+</div>
+<div class="text-[9px] text-on-surface-variant">ACTIVE</div>
+</div>
+<div class="flex items-center gap-3 opacity-40">
+<div class="w-2 h-2 bg-on-surface-variant rounded-full"></div>
+<div class="flex-1">
+<div class="text-[10px] font-bold text-on-surface uppercase">Post-Processing Lab</div>
+<div class="w-full h-1 bg-surface-container-highest rounded-full mt-1">
+<div class="w-0 h-full bg-primary rounded-full"></div>
+</div>
+</div>
+<div class="text-[9px] text-on-surface-variant">QUEUED</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Spacing for Footer -->
+<div class="h-20"></div>
+</main>
+<!-- Footer -->
+<footer class="fixed bottom-0 right-0 w-[calc(100%-16rem)] h-8 bg-[#121500] flex justify-between items-center px-6 py-1 z-50 font-['Inter'] text-[10px] uppercase tracking-widest text-[#00e3fd]">
+<div>© 2024 Kinetic Precision Lab</div>
+<div class="flex gap-8">
+<span class="text-[#00e3fd]">Status: 4K Render Active</span>
+<span class="text-[#a8b074]">Cost: $1.24/min</span>
+<span class="text-[#a8b074]">API Latency: 45ms</span>
+</div>
+</footer>
+</body></html>
