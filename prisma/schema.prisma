@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  passwordHash String
+  name         String?
+  role         String        @default("user")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  trainers     Trainer[]
+  environments Environment[]
+  generations  Generation[]
+}
+
+model Trainer {
+  id           String       @id @default(cuid())
+  name         String
+  baseImageUrl String
+  baseImageKey String
+  userId       String
+  user         User         @relation(fields: [userId], references: [id])
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  generations  Generation[]
+}
+
+model Environment {
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  prompt      String
+  previewUrl  String?
+  previewKey  String?
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  generations Generation[]
+}
+
+model Exercise {
+  id          String       @id @default(cuid())
+  opensetId   String?      @unique
+  name        Json
+  description Json
+  bodyParts   String[]
+  category    String
+  equipment   String[]
+  difficulty  Int          @default(1)
+  metadata    Json?
+  mediaUrls   Json?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  generations Generation[]
+}
+
+enum GenerationStatus {
+  PENDING
+  IMAGE_GENERATING
+  VIDEO_GENERATING
+  COMPLETED
+  FAILED
+}
+
+model Generation {
+  id                String           @id @default(cuid())
+  trainerId         String
+  trainer           Trainer          @relation(fields: [trainerId], references: [id])
+  environmentId     String
+  environment       Environment      @relation(fields: [environmentId], references: [id])
+  exerciseId        String
+  exercise          Exercise         @relation(fields: [exerciseId], references: [id])
+  userId            String
+  user              User             @relation(fields: [userId], references: [id])
+  generatedImageUrl String?
+  generatedImageKey String?
+  generatedVideoUrl String?
+  generatedVideoKey String?
+  veoVersion        String           @default("veo-3.1-generate-preview")
+  status            GenerationStatus @default(PENDING)
+  imageCost         Float?
+  videoCost         Float?
+  totalCost         Float?
+  imagePrompt       String?
+  videoPrompt       String?
+  errorMessage      String?
+  createdAt         DateTime         @default(now())
+  completedAt       DateTime?
+  costLogs          CostLog[]
+}
+
+enum ApiType {
+  NANO_BANANA
+  VEO
+}
+
+model CostLog {
+  id           String     @id @default(cuid())
+  generationId String
+  generation   Generation @relation(fields: [generationId], references: [id])
+  apiType      ApiType
+  model        String
+  inputTokens  Int?
+  outputTokens Int?
+  cost         Float
+  createdAt    DateTime   @default(now())
+}

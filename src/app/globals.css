@@ -7,9 +7,59 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-space-grotesk);
+  --font-headline: var(--font-space-grotesk);
+
+  /* Kinetic Precision Lab - Custom Colors */
+  --color-kp-primary: #ddffb1;
+  --color-kp-primary-dim: #94ef00;
+  --color-kp-primary-container: #9eff00;
+  --color-kp-primary-fixed: #9eff00;
+  --color-kp-on-primary: #3d6700;
+  --color-kp-on-primary-container: #375d00;
+
+  --color-kp-secondary: #00e3fd;
+  --color-kp-secondary-dim: #00d4ec;
+  --color-kp-secondary-container: #006875;
+  --color-kp-secondary-fixed: #26e6ff;
+  --color-kp-on-secondary: #004d57;
+  --color-kp-on-secondary-container: #e8fbff;
+
+  --color-kp-tertiary: #fffada;
+  --color-kp-tertiary-container: #f8f05b;
+  --color-kp-tertiary-dim: #ece451;
+
+  --color-kp-background: #0d1000;
+  --color-kp-surface: #0d1000;
+  --color-kp-surface-dim: #0d1000;
+  --color-kp-surface-bright: #292f00;
+  --color-kp-surface-container-lowest: #000000;
+  --color-kp-surface-container-low: #121500;
+  --color-kp-surface-container: #181c00;
+  --color-kp-surface-container-high: #1d2200;
+  --color-kp-surface-container-highest: #232800;
+  --color-kp-surface-variant: #232800;
+
+  --color-kp-on-surface: #f4fcba;
+  --color-kp-on-surface-variant: #a8b074;
+  --color-kp-on-background: #f4fcba;
+
+  --color-kp-outline: #737a44;
+  --color-kp-outline-variant: #454b1b;
+
+  --color-kp-error: #ff7351;
+  --color-kp-error-dim: #d53d18;
+  --color-kp-error-container: #b92902;
+  --color-kp-on-error: #450900;
+  --color-kp-on-error-container: #ffd2c8;
+
+  --color-kp-inverse-surface: #f7ffbd;
+  --color-kp-inverse-on-surface: #525927;
+  --color-kp-inverse-primary: #3f6a00;
+
+  /* shadcn/ui compatibility */
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,72 +99,39 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --radius: 0.75rem;
+  /* Dark-only app: using Kinetic Precision Lab palette */
+  --background: #0d1000;
+  --foreground: #f4fcba;
+  --card: #232800;
+  --card-foreground: #f4fcba;
+  --popover: #181c00;
+  --popover-foreground: #f4fcba;
+  --primary: #ddffb1;
+  --primary-foreground: #3d6700;
+  --secondary: #00e3fd;
+  --secondary-foreground: #004d57;
+  --muted: #1d2200;
+  --muted-foreground: #a8b074;
+  --accent: #1d2200;
+  --accent-foreground: #f4fcba;
+  --destructive: #ff7351;
+  --border: #454b1b;
+  --input: #232800;
+  --ring: #9eff00;
+  --chart-1: #9eff00;
+  --chart-2: #00e3fd;
+  --chart-3: #f8f05b;
+  --chart-4: #ff7351;
+  --chart-5: #a8b074;
+  --sidebar: #121500;
+  --sidebar-foreground: #f4fcba;
+  --sidebar-primary: #ddffb1;
+  --sidebar-primary-foreground: #3d6700;
+  --sidebar-accent: #1d2200;
+  --sidebar-accent-foreground: #f4fcba;
+  --sidebar-border: #454b1b;
+  --sidebar-ring: #9eff00;
 }
 
 @layer base {
@@ -122,9 +139,35 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-kp-background text-kp-on-surface font-sans selection:bg-kp-primary-container selection:text-kp-on-primary-container;
   }
   html {
     @apply font-sans;
   }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d1000;
+}
+::-webkit-scrollbar-thumb {
+  background: #232800;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #454b1b;
+}
+
+/* Kinetic glass effect */
+.kinetic-glass {
+  background: rgba(35, 40, 0, 0.4);
+  backdrop-filter: blur(20px);
+}
+
+/* Material Symbols */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
