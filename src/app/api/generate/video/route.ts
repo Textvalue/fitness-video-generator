@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { after } from "next/server";
 import { prisma } from "@/lib/db";
 import { generateVideo, VeoVersion } from "@/lib/gemini";
-import { uploadFile } from "@/lib/storage";
+import { uploadFile, downloadFile } from "@/lib/storage";
 import { randomUUID } from "crypto";
 
 export const maxDuration = 300; // 5 min timeout for background work
@@ -46,13 +46,12 @@ export async function POST(req: NextRequest) {
   after(async () => {
     try {
       let imageBase64: string | undefined;
-      if (generation.generatedImageUrl) {
+      if (generation.generatedImageKey) {
         try {
-          const imgRes = await fetch(generation.generatedImageUrl);
-          const imgBuffer = Buffer.from(await imgRes.arrayBuffer());
+          const imgBuffer = await downloadFile(generation.generatedImageKey);
           imageBase64 = imgBuffer.toString("base64");
-        } catch {
-          // Generate without reference image
+        } catch (err) {
+          console.warn("Failed to download generated image from storage:", err);
         }
       }
 

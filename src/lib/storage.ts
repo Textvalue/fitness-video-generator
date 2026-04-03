@@ -30,6 +30,14 @@ export async function uploadFile(
   return `${process.env.TIGRIS_ENDPOINT}/${BUCKET}/${key}`;
 }
 
+export async function downloadFile(key: string): Promise<Buffer> {
+  const response = await s3Client.send(
+    new GetObjectCommand({ Bucket: BUCKET, Key: key })
+  );
+  const bytes = await response.Body!.transformToByteArray();
+  return Buffer.from(bytes);
+}
+
 export async function getPresignedUrl(key: string, expiresIn = 3600): Promise<string> {
   return getSignedUrl(
     s3Client,

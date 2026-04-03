@@ -69,7 +69,8 @@ export async function generateImage(
 export async function generateVideo(
   prompt: string,
   veoVersion: VeoVersion = "veo-3.1",
-  referenceImageBase64?: string
+  referenceImageBase64?: string,
+  referenceImageMimeType: string = "image/png"
 ) {
   const model = VEO_MODELS[veoVersion];
 
@@ -77,12 +78,10 @@ export async function generateVideo(
     model,
     ...(referenceImageBase64
       ? {
-          // Image-to-video: image goes in source, no prompt
-          source: {
-            image: {
-              imageBytes: referenceImageBase64,
-              mimeType: "image/png",
-            },
+          // Image-to-video: pass image directly
+          image: {
+            imageBytes: referenceImageBase64,
+            mimeType: referenceImageMimeType,
           },
         }
       : {
