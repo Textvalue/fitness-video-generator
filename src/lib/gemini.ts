@@ -69,15 +69,19 @@ export async function generateImage(
 export async function generateVideo(
   prompt: string,
   veoVersion: VeoVersion = "veo-3.1",
-  _referenceImageBase64?: string
+  referenceImageBase64?: string
 ) {
   const model = VEO_MODELS[veoVersion];
 
   let operation = await ai.models.generateVideos({
     model,
-    source: {
-      prompt,
-    },
+    prompt,
+    ...(referenceImageBase64 && {
+      image: {
+        imageBytes: referenceImageBase64,
+        mimeType: "image/png",
+      },
+    }),
     config: {
       numberOfVideos: 1,
       aspectRatio: "16:9",
