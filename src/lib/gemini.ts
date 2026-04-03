@@ -75,13 +75,20 @@ export async function generateVideo(
 
   let operation = await ai.models.generateVideos({
     model,
-    prompt,
-    ...(referenceImageBase64 && {
-      image: {
-        imageBytes: referenceImageBase64,
-        mimeType: "image/png",
-      },
-    }),
+    ...(referenceImageBase64
+      ? {
+          // Image-to-video: image goes in source, no prompt
+          source: {
+            image: {
+              imageBytes: referenceImageBase64,
+              mimeType: "image/png",
+            },
+          },
+        }
+      : {
+          // Text-to-video: prompt only
+          prompt,
+        }),
     config: {
       numberOfVideos: 1,
       aspectRatio: "16:9",
