@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { generateImage } from "@/lib/gemini";
-import { uploadFile } from "@/lib/storage";
+import { uploadFile, downloadFile } from "@/lib/storage";
 import { randomUUID } from "crypto";
 
 export async function POST(req: NextRequest) {
@@ -33,23 +33,16 @@ export async function POST(req: NextRequest) {
   const exerciseDesc = (exercise.description as Record<string, string>).en || "";
   const exercisePrompt = exercise.generationPrompt || "";
 
-  // Fetch trainer image first so we can tailor the prompt
+  // Download trainer image from S3 directly using the storage key
   let trainerBase64: string | undefined;
-  let trainerMimeType = "image/jpeg";
+  const trainerMimeType = trainer.baseImageKey.endsWith(".png") ? "image/png" : "image/jpeg";
   try {
-    const trainerRes = await fetch(trainer.baseImageUrl);
-    if (trainerRes.ok) {
-      const contentType = trainerRes.headers.get("content-type");
-      if (contentType) {
-        trainerMimeType = contentType.split(";")[0].trim();
-      }
-      const trainerBuffer = Buffer.from(await trainerRes.arrayBuffer());
-      if (trainerBuffer.length < 4 * 1024 * 1024) {
-        trainerBase64 = trainerBuffer.toString("base64");
-      }
+    const trainerBuffer = await downloadFile(trainer.baseImageKey);
+    if (trainerBuffer.length < 4 * 1024 * 1024) {
+      trainerBase64 = trainerBuffer.toString("base64");
     }
-  } catch {
-    console.warn("Failed to fetch trainer image, generating without reference");
+  } catch (err) {
+    console.warn("Failed to download trainer image from storage:", err);
   }
 
   // Compose the image generation prompt — when we have a reference image,
