@@ -5,22 +5,30 @@ import { uploadFile, downloadFile } from "@/lib/storage";
 import { randomUUID } from "crypto";
 
 export async function POST(req: NextRequest) {
-  const { trainerId, environmentId, exerciseId } = await req.json();
+  try {
+  const { trainerId, environmentId, exerciseId, useTrainerEnvironment } = await req.json();
 
-  if (!trainerId || !environmentId || !exerciseId) {
+  if (!trainerId || !exerciseId) {
     return NextResponse.json(
-      { error: "trainerId, environmentId, and exerciseId are required" },
+      { error: "trainerId and exerciseId are required" },
+      { status: 400 }
+    );
+  }
+
+  if (!environmentId && !useTrainerEnvironment) {
+    return NextResponse.json(
+      { error: "environmentId or useTrainerEnvironment is required" },
       { status: 400 }
     );
   }
 
   const [trainer, environment, exercise] = await Promise.all([
     prisma.trainer.findUnique({ where: { id: trainerId } }),
-    prisma.environment.findUnique({ where: { id: environmentId } }),
+    environmentId ? prisma.environment.findUnique({ where: { id: environmentId } }) : null,
     prisma.exercise.findUnique({ where: { id: exerciseId } }),
   ]);
 
-  if (!trainer || !environment || !exercise) {
+  if (!trainer || (!environment && !useTrainerEnvironment) || !exercise) {
     return NextResponse.json({ error: "Resource not found" }, { status: 404 });
   }
 
@@ -45,42 +53,56 @@ export async function POST(req: NextRequest) {
     console.warn("Failed to download trainer image from storage:", err);
   }
 
-  // Compose the image generation prompt — when we have a reference image,
-  // explicitly instruct the model to match the person's appearance
+  // Compose the image generation prompts — one for reference-image editing,
+  // one fallback for text-only generation
   const movementInstructions = exercisePrompt
     ? `Exercise-specific instructions: ${exercisePrompt}`
     : `Exercise description: ${exerciseDesc}`;
 
-  const prompt = trainerBase64
-    ? `Edit this photo of a person: place them performing the exercise "${exerciseName}". Keep the person exactly as they are — do not change their face, gender, body, skin tone, or identity. Only change their pose and surroundings.
+  const environmentLine = useTrainerEnvironment
+    ? "Environment: Keep the exact same background, setting, and environment from the original photo. Do not change the surroundings."
+    : `Environment: ${environment!.prompt}`;
+
+  const referencePrompt = `Edit this photo of a person: place them performing the exercise "${exerciseName}". Keep the person exactly as they are — do not change their face, gender, body, skin tone, or identity. Only change their pose${useTrainerEnvironment ? "" : " and surroundings"}.
 ${movementInstructions}
-Environment: ${environment.prompt}
-Show proper athletic form with correct technique. High quality, cinematic lighting.`
-    : `Generate a photorealistic image of a fitness trainer named "${trainer.name}" performing "${exerciseName}".
+${environmentLine}
+Show proper athletic form with correct technique. High quality, cinematic lighting.`;
+
+  const fallbackPrompt = `Generate a photorealistic image of a fitness trainer named "${trainer.name}" performing "${exerciseName}".
 ${movementInstructions}
-Environment: ${environment.prompt}
+${environmentLine}
 The trainer should be in proper athletic form with correct technique. High quality, 8K, cinematic lighting.`;
+
+  const prompt = trainerBase64 ? referencePrompt : fallbackPrompt;
 
   // Create generation record
   const generation = await prisma.generation.create({
     data: {
-      trainerId,
-      environmentId,
-      exerciseId,
-      userId: user.id,
+      trainer: { connect: { id: trainerId } },
+      exercise: { connect: { id: exerciseId } },
+      user: { connect: { id: user.id } },
+      ...(environmentId ? { environment: { connect: { id: environmentId } } } : {}),
       status: "IMAGE_GENERATING",
       imagePrompt: prompt,
     },
   });
 
   try {
-    // Try with reference image first, fall back to without
+    // Try with reference image first, fall back to text-only prompt without reference
     let result;
-    try {
-      result = await generateImage(prompt, trainerBase64, trainerMimeType);
-    } catch (refError) {
-      console.warn("Image generation with reference failed, retrying without:", refError);
-      result = await generateImage(prompt);
+    if (trainerBase64) {
+      try {
+        result = await generateImage(referencePrompt, trainerBase64, trainerMimeType);
+        if (!result.imageData) {
+          console.warn("Image generation with reference returned no image (model response text:", result.text, "), retrying with text-only prompt");
+          result = await generateImage(fallbackPrompt);
+        }
+      } catch (refError) {
+        console.warn("Image generation with reference failed, retrying with text-only prompt:", refError);
+        result = await generateImage(fallbackPrompt);
+      }
+    } else {
+      result = await generateImage(fallbackPrompt);
     }
 
     if (!result.imageData) {
@@ -127,6 +149,13 @@ The trainer should be in proper athletic form with correct technique. High quali
 
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Image generation failed" },
+      { status: 500 }
+    );
+  }
+  } catch (err) {
+    console.error("Unhandled error in generate/image:", err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "Internal server error" },
       { status: 500 }
     );
   }

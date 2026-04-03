@@ -8,7 +8,7 @@ import { randomUUID } from "crypto";
 export const maxDuration = 300; // 5 min timeout for background work
 
 export async function POST(req: NextRequest) {
-  const { generationId, veoVersion = "veo-3.1" } = await req.json();
+  const { generationId, veoVersion = "veo-3.1-lite", durationSeconds = 4 } = await req.json();
 
   if (!generationId) {
     return NextResponse.json(
@@ -31,7 +31,8 @@ export async function POST(req: NextRequest) {
   const exercisePrompt = generation.exercise.generationPrompt || "";
 
   const movementDetail = exercisePrompt || exerciseDesc;
-  const videoPrompt = `Cinematic fitness video of a trainer performing "${exerciseName}". ${movementDetail}. Environment: ${generation.environment.prompt}. Smooth, professional camera movement, proper exercise form and technique, high production value.`;
+  const environmentDesc = generation.environment?.prompt || "a clean, professional gym setting";
+  const videoPrompt = `Cinematic fitness video of a trainer performing "${exerciseName}". ${movementDetail}. Environment: ${environmentDesc}. Smooth, professional camera movement, proper exercise form and technique, high production value.`;
 
   await prisma.generation.update({
     where: { id: generationId },
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      const result = await generateVideo(videoPrompt, veoVersion as VeoVersion, imageBase64);
+      const result = await generateVideo(videoPrompt, veoVersion as VeoVersion, imageBase64, durationSeconds);
 
       const key = `generations/${generationId}/${randomUUID()}.mp4`;
       const videoUrl = await uploadFile(key, result.videoBuffer, "video/mp4");
@@ -63,7 +64,8 @@ export async function POST(req: NextRequest) {
       const costMap: Record<string, number> = {
         "veo-3.1": 0.50,
         "veo-3.1-fast": 0.25,
-        "veo-3.0": 0.35,
+        "veo-3.1-lite": 0.10,
+        "veo-2.0": 0.20,
       };
       const videoCost = costMap[veoVersion] || 0.50;
       const imageCost = generation.imageCost || 0.02;

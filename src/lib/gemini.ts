@@ -6,7 +6,8 @@ export const NANO_BANANA_MODEL = "gemini-3.1-flash-image-preview";
 export const VEO_MODELS = {
   "veo-3.1": "veo-3.1-generate-preview",
   "veo-3.1-fast": "veo-3.1-fast-generate-preview",
-  "veo-3.0": "veo-3.0-generate-001",
+  "veo-3.1-lite": "veo-3.1-lite-generate-preview",
+  "veo-2.0": "veo-2.0-generate-001",
 } as const;
 
 export type VeoVersion = keyof typeof VEO_MODELS;
@@ -68,31 +69,28 @@ export async function generateImage(
 
 export async function generateVideo(
   prompt: string,
-  veoVersion: VeoVersion = "veo-3.1",
+  veoVersion: VeoVersion = "veo-3.1-lite",
   referenceImageBase64?: string,
-  referenceImageMimeType: string = "image/png"
+  durationSeconds: number = 4
 ) {
   const model = VEO_MODELS[veoVersion];
 
+  const source: Record<string, unknown> = { prompt };
+  if (referenceImageBase64) {
+    source.image = {
+      imageBytes: referenceImageBase64,
+      mimeType: "image/png",
+    };
+  }
+
   let operation = await ai.models.generateVideos({
     model,
-    ...(referenceImageBase64
-      ? {
-          // Image-to-video: pass image directly
-          image: {
-            imageBytes: referenceImageBase64,
-            mimeType: referenceImageMimeType,
-          },
-        }
-      : {
-          // Text-to-video: prompt only
-          prompt,
-        }),
+    source,
     config: {
       numberOfVideos: 1,
       aspectRatio: "16:9",
       resolution: "720p",
-      durationSeconds: 8,
+      durationSeconds,
     },
   });
 

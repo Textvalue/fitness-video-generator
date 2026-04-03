@@ -57,6 +57,7 @@ export function LibraryClient({
   const [generations, setGenerations] = useState(initialGenerations);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [visibleCount, setVisibleCount] = useState(20);
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
 
   // Add/Edit exercise
@@ -70,7 +71,7 @@ export function LibraryClient({
   const [environments, setEnvironments] = useState<Environment[]>([]);
   const [selectedTrainerId, setSelectedTrainerId] = useState("");
   const [selectedEnvId, setSelectedEnvId] = useState("");
-  const [veoVersion, setVeoVersion] = useState("veo-3.1");
+  const [veoVersion, setVeoVersion] = useState("veo-3.1-lite");
   const [step, setStep] = useState<"select" | "image" | "review" | "video" | "done">("select");
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
   const [generatedVideoUrl, setGeneratedVideoUrl] = useState<string | null>(null);
@@ -90,6 +91,14 @@ export function LibraryClient({
     const catMatch = categoryFilter === "All" || e.category === categoryFilter;
     return nameMatch && catMatch;
   });
+
+  const visible = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setVisibleCount(20);
+  }, [search, categoryFilter]);
 
   const getVideosForExercise = (exerciseId: string) =>
     generations.filter((g) => g.exerciseId === exerciseId && g.videoUrl);
@@ -190,7 +199,7 @@ export function LibraryClient({
 
   // Generation pipeline
   const handleGenerateImage = async () => {
-    if (!selectedExercise || !selectedTrainerId || !selectedEnvId) return;
+    if (!selectedExercise || !selectedTrainerId || (!selectedEnvId && selectedEnvId !== "from-photo")) return;
     setLoading(true);
     setError(null);
     setStep("image");
@@ -198,9 +207,9 @@ export function LibraryClient({
       const res = await fetch("/api/generate/image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ trainerId: selectedTrainerId, environmentId: selectedEnvId, exerciseId: selectedExercise.id }),
+        body: JSON.stringify({ trainerId: selectedTrainerId, environmentId: selectedEnvId === "from-photo" ? null : selectedEnvId, exerciseId: selectedExercise.id, useTrainerEnvironment: selectedEnvId === "from-photo" }),
       });
-      if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }
+      if (!res.ok) { const text = await res.text(); try { const d = JSON.parse(text); throw new Error(d.error || "Failed"); } catch (e) { if (e instanceof SyntaxError) throw new Error(text || `Server error (${res.status})`); throw e; } }
       const result = await res.json();
       setGeneratedImageUrl(toProxyUrl(result.imageUrl));
       setGenerationId(result.generationId);
@@ -224,7 +233,7 @@ export function LibraryClient({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ generationId, veoVersion }),
       });
-      if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed"); }
+      if (!res.ok) { const text = await res.text(); try { const d = JSON.parse(text); throw new Error(d.error || "Failed"); } catch (e) { if (e instanceof SyntaxError) throw new Error(text || `Server error (${res.status})`); throw e; } }
 
       // Poll for completion
       const poll = async (): Promise<void> => {
@@ -309,7 +318,7 @@ export function LibraryClient({
 
         {/* Exercise Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {filtered.map((exercise) => {
+          {visible.map((exercise) => {
             const videos = getVideosForExercise(exercise.id);
             const imageUrl = exercise.mediaUrls?.photos?.[0]?.url;
             return (
@@ -320,7 +329,7 @@ export function LibraryClient({
               >
                 <div className="aspect-[4/3] relative overflow-hidden">
                   {imageUrl ? (
-                    <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={imageUrl} alt={exercise.name.en} />
+                    <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={imageUrl} alt={exercise.name.en} loading="lazy" />
                   ) : (
                     <div className="w-full h-full bg-kp-surface-container-low flex items-center justify-center">
                       <span className="material-symbols-outlined text-4xl text-kp-on-surface-variant/20">fitness_center</span>
@@ -361,6 +370,17 @@ export function LibraryClient({
             );
           })}
         </div>
+
+        {hasMore && (
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={() => setVisibleCount((c) => c + 20)}
+              className="bg-kp-surface-container-highest text-kp-on-surface-variant px-8 py-3 rounded-full font-headline font-bold text-sm uppercase tracking-widest hover:bg-kp-surface-bright transition-colors"
+            >
+              Load More ({filtered.length - visibleCount} remaining)
+            </button>
+          </div>
+        )}
 
         {filtered.length === 0 && (
           <div className="text-center py-20 text-kp-on-surface-variant">
@@ -526,18 +546,21 @@ export function LibraryClient({
                     </div>
                     <div>
                       <h4 className="text-[10px] font-bold uppercase tracking-widest text-kp-on-surface-variant mb-3">Select Environment</h4>
-                      {environments.length === 0 ? (
-                        <p className="text-xs text-kp-on-surface-variant/60">No environments yet. <a href="/environments" className="text-kp-primary underline">Create one</a>.</p>
-                      ) : (
-                        <div className="space-y-2 max-h-48 overflow-y-auto">
-                          {environments.map((env) => (
-                            <button key={env.id} onClick={() => setSelectedEnvId(env.id)} className={`w-full text-left p-3 rounded-lg transition-all ${selectedEnvId === env.id ? "bg-kp-secondary/10 ring-1 ring-kp-secondary" : "bg-kp-surface-container-highest hover:bg-kp-surface-bright"}`}>
-                              <div className="font-headline font-bold text-sm">{env.name}</div>
-                              <p className="text-[10px] text-kp-on-surface-variant line-clamp-1 mt-1">{env.prompt}</p>
-                            </button>
-                          ))}
-                        </div>
-                      )}
+                      <div className="space-y-2 max-h-48 overflow-y-auto">
+                        <button onClick={() => setSelectedEnvId("from-photo")} className={`w-full text-left p-3 rounded-lg transition-all ${selectedEnvId === "from-photo" ? "bg-kp-secondary/10 ring-1 ring-kp-secondary" : "bg-kp-surface-container-highest hover:bg-kp-surface-bright"}`}>
+                          <div className="font-headline font-bold text-sm flex items-center gap-2">
+                            <span className="material-symbols-outlined text-sm">photo_camera</span>
+                            Use From Photo
+                          </div>
+                          <p className="text-[10px] text-kp-on-surface-variant line-clamp-1 mt-1">Keep the background from the trainer&apos;s image</p>
+                        </button>
+                        {environments.map((env) => (
+                          <button key={env.id} onClick={() => setSelectedEnvId(env.id)} className={`w-full text-left p-3 rounded-lg transition-all ${selectedEnvId === env.id ? "bg-kp-secondary/10 ring-1 ring-kp-secondary" : "bg-kp-surface-container-highest hover:bg-kp-surface-bright"}`}>
+                            <div className="font-headline font-bold text-sm">{env.name}</div>
+                            <p className="text-[10px] text-kp-on-surface-variant line-clamp-1 mt-1">{env.prompt}</p>
+                          </button>
+                        ))}
+                      </div>
                     </div>
                     <div className="lg:col-span-2 pt-2">
                       <button onClick={handleGenerateImage} disabled={!selectedTrainerId || !selectedEnvId || loading} className="bg-gradient-to-r from-kp-primary to-kp-secondary text-kp-on-primary px-8 py-3 rounded-full font-headline font-bold text-sm uppercase tracking-widest disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-[0_0_20px_rgba(221,255,177,0.2)] transition-all">
@@ -564,7 +587,8 @@ export function LibraryClient({
                         <select value={veoVersion} onChange={(e) => setVeoVersion(e.target.value)} className="bg-kp-surface-container-highest rounded-lg p-3 text-sm text-kp-on-surface border-none focus:ring-1 focus:ring-kp-primary">
                           <option value="veo-3.1">Veo 3.1 (Best)</option>
                           <option value="veo-3.1-fast">Veo 3.1 Fast</option>
-                          <option value="veo-3.0">Veo 3.0</option>
+                          <option value="veo-3.1-lite">Veo 3.1 Lite</option>
+                          <option value="veo-2.0">Veo 2.0</option>
                         </select>
                       </div>
                       <button onClick={handleGenerateVideo} className="bg-gradient-to-r from-kp-secondary to-kp-primary text-kp-on-primary px-8 py-3 rounded-full font-headline font-bold text-sm uppercase tracking-widest hover:shadow-[0_0_20px_rgba(0,227,253,0.2)] transition-all">

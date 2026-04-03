@@ -36,6 +36,8 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   if (!trainer) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   try { await deleteFile(trainer.baseImageKey); } catch {}
+  await prisma.costLog.deleteMany({ where: { generation: { trainerId: id } } });
+  await prisma.generation.deleteMany({ where: { trainerId: id } });
   await prisma.trainer.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }

@@ -75,8 +75,8 @@ model Generation {
   id                String           @id @default(cuid())
   trainerId         String
   trainer           Trainer          @relation(fields: [trainerId], references: [id])
-  environmentId     String
-  environment       Environment      @relation(fields: [environmentId], references: [id])
+  environmentId     String?
+  environment       Environment?     @relation(fields: [environmentId], references: [id])
   exerciseId        String
   exercise          Exercise         @relation(fields: [exerciseId], references: [id])
   userId            String

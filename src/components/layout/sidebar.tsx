@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 
 const navItems = [
   { icon: "fitness_center", label: "Exercises", href: "/" },
+  { icon: "movie", label: "Videos", href: "/videos" },
+  { icon: "video_library", label: "Bulk Generate", href: "/bulk-generate" },
   { icon: "person", label: "Trainers", href: "/trainers" },
   { icon: "landscape", label: "Environments", href: "/environments" },
 ];
